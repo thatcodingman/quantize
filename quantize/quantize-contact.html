@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+(function(){
+  try {
+    var saved = localStorage.getItem('quantize-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {}
+})();
+</script>
+<title>Contact — Quantize</title>
+<meta name="description" content="Get in touch with Quantize for bug reports, feature requests, or general questions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="quantize-styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <a href="index.html" class="wordmark">Quantize</a>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="quantize-about.html">About</a>
+    <a href="quantize-faq.html">FAQ</a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">Dark</button>
+  </nav>
+</header>
+
+<main>
+  <div class="legal">
+    <h1>Contact</h1>
+    <p class="updated">Bugs, ideas, and everything else</p>
+
+    <p>Quantize is small and independently run, so email is the fastest way to reach us. We read everything, even if a reply takes a day or two.</p>
+
+    <div class="contact-card">
+      <p class="kind">Bug report or feature request</p>
+      <p>If a specific image isn't compressing right, let us know the format, roughly how large the file was, and what settings you used.</p>
+      <a class="mail-btn" href="mailto:hello@quantizeapp.io?subject=Bug%20report">Email a bug report</a>
+    </div>
+
+    <div class="contact-card">
+      <p class="kind">General question</p>
+      <p>Anything else — how the tool works, a licensing question, press — goes to the same inbox.</p>
+      <a class="mail-btn" href="mailto:hello@quantizeapp.io">Send an email</a>
+    </div>
+
+    <p>Before writing in, the <a href="quantize-faq.html">FAQ</a> answers most common questions about formats, target size mode, and what happens to your files.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <nav>
+      <a href="quantize-about.html">About</a>
+      <a href="quantize-faq.html">FAQ</a>
+      <a href="quantize-contact.html">Contact</a>
+      <a href="quantize-terms.html">Terms</a>
+      <a href="quantize-privacy.html">Privacy</a>
+    </nav>
+    <p>© 2026 Quantize</p>
+  </div>
+</footer>
+
+<script src="quantize-theme.js"></script>
+</body>
+</html>
