@@ -167,13 +167,14 @@
         <p class="results-status">✓ Compression complete</p>
         <div class="results-hero">
           <span class="results-hero-pct" id="resultsPct">0%</span>
-          <span class="results-hero-label">smaller</span>
+          <span class="results-hero-label" id="resultsHeroLabel">smaller</span>
         </div>
         <p class="results-sizes">
           <span id="resultsOriginal">0 B</span>
           <span class="arrow">→</span>
           <span class="accent" id="resultsFinal">0 B</span>
         </p>
+        <p class="results-note" id="resultsNote" hidden></p>
         <p class="results-meta" id="resultsMeta" hidden></p>
         <p class="results-count" id="resultsCountLine" hidden></p>
 
@@ -188,6 +189,7 @@
           </div>
         </div>
 
+        <button class="secondary" id="tryLowerQualityBtn" hidden>Try lower quality</button>
         <button class="primary cta-big results-download-btn" id="downloadZipBtn" disabled>Download image →</button>
         <div class="results-secondary">
           <button class="secondary" id="compressAgainBtn">Compress again</button>

@@ -156,6 +156,9 @@ const resultsCountLineEl = document.getElementById('resultsCountLine');
 const resultsPreviewEl = document.getElementById('resultsPreview');
 const resultsBeforeImg = document.getElementById('resultsBeforeImg');
 const resultsAfterImg = document.getElementById('resultsAfterImg');
+const resultsHeroLabelEl = document.getElementById('resultsHeroLabel');
+const resultsNoteEl = document.getElementById('resultsNote');
+const tryLowerQualityBtn = document.getElementById('tryLowerQualityBtn');
 const compressAgainBtn = document.getElementById('compressAgainBtn');
 const addMoreResultsBtn = document.getElementById('addMoreResultsBtn');
 const dropZoneHeadline = document.getElementById('dropZoneHeadline');
@@ -287,9 +290,15 @@ function renderFileRow(entry) {
   row.className = 'file-row';
   const thumbSrc = entry.img ? entry.img.src : '';
   const compressedText = entry.compressedSize != null ? fmtBytes(entry.compressedSize) : '—';
-  const savedPct = entry.compressedSize != null && entry.originalSize > 0
-    ? Math.max(0, Math.round((1 - entry.compressedSize / entry.originalSize) * 100))
-    : null;
+  let savedPctTag = '';
+  if (entry.compressedSize != null && entry.originalSize > 0) {
+    if (entry.compressedSize < entry.originalSize) {
+      const pct = Math.round((1 - entry.compressedSize / entry.originalSize) * 100);
+      savedPctTag = `<span class="saved-pct">−${pct}%</span>`;
+    } else {
+      savedPctTag = `<span class="saved-pct no-reduction">No reduction</span>`;
+    }
+  }
   const hasResult = !!entry.compressedBlob;
   const statusLabels = { ready: 'Ready', processing: 'Compressing…', done: 'Done', failed: 'Failed' };
   const statusText = statusLabels[entry.status] || 'Ready';
@@ -317,7 +326,7 @@ function renderFileRow(entry) {
         <span class="size-before">${fmtBytes(entry.originalSize)}</span>
         <span class="arrow">→</span>
         <span class="size-after">${compressedText}</span>
-        ${savedPct !== null ? `<span class="saved-pct">−${savedPct}%</span>` : ''}
+        ${savedPctTag}
         <span class="file-status status-${entry.status}">${statusText}</span>
       </p>
     </div>
@@ -591,13 +600,33 @@ function showResultsPanel() {
   if (!processed.length) return;
   const totalOriginal = processed.reduce((s, e) => s + e.originalSize, 0);
   const totalCompressed = processed.reduce((s, e) => s + e.compressedSize, 0);
-  const savedPct = Math.max(0, totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0);
+  const isSmaller = totalCompressed < totalOriginal;
 
   resultsOriginalEl.textContent = fmtBytes(totalOriginal);
   resultsFinalEl.textContent = fmtBytes(totalCompressed);
-  animateNumber(resultsPctEl, 0, savedPct, '%', 600);
   compressionCompleted = true;
   updateProcessButtonState();
+
+  if (isSmaller) {
+    const savedPct = totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0;
+    animateNumber(resultsPctEl, 0, savedPct, '%', 600);
+    resultsPctEl.classList.remove('no-reduction');
+    resultsHeroLabelEl.textContent = 'smaller';
+    resultsHeroLabelEl.hidden = false;
+    resultsFinalEl.classList.remove('no-reduction-color');
+    resultsNoteEl.hidden = true;
+    tryLowerQualityBtn.hidden = true;
+  } else {
+    resultsPctEl.textContent = 'No reduction';
+    resultsPctEl.classList.add('no-reduction');
+    resultsHeroLabelEl.hidden = true;
+    resultsFinalEl.classList.add('no-reduction-color');
+    resultsNoteEl.textContent = processed.length === 1
+      ? 'This image was already highly optimized.'
+      : 'These images were already highly optimized.';
+    resultsNoteEl.hidden = false;
+    tryLowerQualityBtn.hidden = false;
+  }
 
   if (processed.length === 1) {
     // Single image: show output metadata + a compact before/after preview.
@@ -795,6 +824,21 @@ downloadZipBtn.addEventListener('click', async () => {
 });
 
 compressAgainBtn.addEventListener('click', () => {
+  resultsPanel.classList.remove('visible');
+  processAll();
+});
+
+tryLowerQualityBtn.addEventListener('click', () => {
+  const qualityRadio = document.querySelector('input[name="mode"][value="quality"]');
+  qualityRadio.checked = true;
+  updateModeVisibility();
+
+  const current = parseInt(qualitySlider.value, 10);
+  const next = Math.max(10, current - 15);
+  qualitySlider.value = next;
+  qualityValueLabel.textContent = next + '%';
+  scheduleEstimate();
+
   resultsPanel.classList.remove('visible');
   processAll();
 });
