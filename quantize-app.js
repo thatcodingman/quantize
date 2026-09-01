@@ -148,10 +148,14 @@ const progressWrap = document.getElementById('progressWrap');
 const progressFill = document.getElementById('progressFill');
 const progressStatusText = document.getElementById('progressStatusText');
 const resultsPanel = document.getElementById('resultsPanel');
-const resultsCountEl = document.getElementById('resultsCount');
 const resultsOriginalEl = document.getElementById('resultsOriginal');
 const resultsFinalEl = document.getElementById('resultsFinal');
 const resultsPctEl = document.getElementById('resultsPct');
+const resultsMetaEl = document.getElementById('resultsMeta');
+const resultsCountLineEl = document.getElementById('resultsCountLine');
+const resultsPreviewEl = document.getElementById('resultsPreview');
+const resultsBeforeImg = document.getElementById('resultsBeforeImg');
+const resultsAfterImg = document.getElementById('resultsAfterImg');
 const compressAgainBtn = document.getElementById('compressAgainBtn');
 const addMoreResultsBtn = document.getElementById('addMoreResultsBtn');
 const dropZoneHeadline = document.getElementById('dropZoneHeadline');
@@ -366,12 +370,18 @@ function updateSummary() {
   }
 }
 
+let compressionCompleted = false;
+
 function updateProcessButtonState() {
   const ready = state.entries.filter((e) => e.img && !e.error).length;
   processAllBtn.disabled = ready === 0;
-  processAllBtn.textContent = ready > 0
-    ? `Compress ${ready} image${ready > 1 ? 's' : ''} →`
-    : 'Compress images →';
+  if (compressionCompleted && ready > 0) {
+    processAllBtn.textContent = 'Compress again →';
+  } else {
+    processAllBtn.textContent = ready > 0
+      ? `Compress ${ready} image${ready > 1 ? 's' : ''} →`
+      : 'Compress images →';
+  }
 }
 
 // ============ Live estimate ============
@@ -585,11 +595,34 @@ function showResultsPanel() {
 
   resultsOriginalEl.textContent = fmtBytes(totalOriginal);
   resultsFinalEl.textContent = fmtBytes(totalCompressed);
-  animateNumber(resultsCountEl, 0, processed.length, '', 500);
   animateNumber(resultsPctEl, 0, savedPct, '%', 600);
+  compressionCompleted = true;
+  updateProcessButtonState();
+
+  if (processed.length === 1) {
+    // Single image: show output metadata + a compact before/after preview.
+    const entry = processed[0];
+    resultsMetaEl.textContent = `${(entry.outFormat || '').toUpperCase()} · ${entry.outWidth}×${entry.outHeight} · ${fmtBytes(entry.compressedSize)}`;
+    resultsMetaEl.hidden = false;
+    resultsCountLineEl.hidden = true;
+
+    if (!entry.compareUrl) entry.compareUrl = URL.createObjectURL(entry.compressedBlob);
+    resultsBeforeImg.src = entry.img.src;
+    resultsAfterImg.src = entry.compareUrl;
+    resultsPreviewEl.hidden = false;
+
+    downloadZipBtn.textContent = 'Download image →';
+  } else {
+    resultsMetaEl.hidden = true;
+    resultsCountLineEl.textContent = `${processed.length} images compressed`;
+    resultsCountLineEl.hidden = false;
+    resultsPreviewEl.hidden = true;
+
+    downloadZipBtn.textContent = 'Download all · ZIP →';
+  }
+
   resultsPanel.classList.add('visible');
   downloadZipBtn.disabled = false;
-  downloadZipBtn.textContent = processed.length > 1 ? 'Download ZIP →' : 'Download image →';
 }
 
 async function retryEntry(id) {
@@ -663,6 +696,7 @@ addMoreBtn.addEventListener('click', () => fileInput.click());
 clearAllBtn.addEventListener('click', () => {
   state.entries.forEach((e) => { if (e.compareUrl) URL.revokeObjectURL(e.compareUrl); });
   state.entries = [];
+  compressionCompleted = false;
   fileListEl.innerHTML = '';
   updateSummary();
   updateProcessButtonState();

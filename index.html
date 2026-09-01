@@ -164,13 +164,31 @@
       </div>
 
       <div class="results-panel" id="resultsPanel" aria-live="polite">
-        <div class="results-stats">
-          <div class="stat"><span class="stat-label">Images</span><span class="stat-value" id="resultsCount">0</span></div>
-          <div class="stat"><span class="stat-label">Original</span><span class="stat-value" id="resultsOriginal">0 B</span></div>
-          <div class="stat"><span class="stat-label">Final</span><span class="stat-value" id="resultsFinal">0 B</span></div>
-          <div class="stat"><span class="stat-label">Saved</span><span class="stat-value accent" id="resultsPct">0%</span></div>
+        <p class="results-status">✓ Compression complete</p>
+        <div class="results-hero">
+          <span class="results-hero-pct" id="resultsPct">0%</span>
+          <span class="results-hero-label">smaller</span>
         </div>
-        <button class="primary cta-big results-download-btn" id="downloadZipBtn" disabled>Download ZIP →</button>
+        <p class="results-sizes">
+          <span id="resultsOriginal">0 B</span>
+          <span class="arrow">→</span>
+          <span class="accent" id="resultsFinal">0 B</span>
+        </p>
+        <p class="results-meta" id="resultsMeta" hidden></p>
+        <p class="results-count" id="resultsCountLine" hidden></p>
+
+        <div class="results-preview" id="resultsPreview" hidden>
+          <div class="results-preview-col">
+            <img id="resultsBeforeImg" alt="Original">
+            <span class="compare-label">Before</span>
+          </div>
+          <div class="results-preview-col">
+            <img id="resultsAfterImg" alt="Compressed">
+            <span class="compare-label">After</span>
+          </div>
+        </div>
+
+        <button class="primary cta-big results-download-btn" id="downloadZipBtn" disabled>Download image →</button>
         <div class="results-secondary">
           <button class="secondary" id="compressAgainBtn">Compress again</button>
           <button class="secondary" id="addMoreResultsBtn">Add more images</button>
