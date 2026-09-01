@@ -144,6 +144,7 @@ const pngNote = document.getElementById('pngNote');
 const estimateBox = document.getElementById('estimateBox');
 const estimateValueEl = document.getElementById('estimateValue');
 const estimateReductionEl = document.getElementById('estimateReduction');
+const estimateLabelEl = document.getElementById('estimateLabel');
 const progressWrap = document.getElementById('progressWrap');
 const progressFill = document.getElementById('progressFill');
 const progressStatusText = document.getElementById('progressStatusText');
@@ -445,6 +446,9 @@ async function computeEstimate() {
   const settings = collectSettings();
   const totalOriginal = readyEntries.reduce((s, e) => s + e.originalSize, 0);
   estimateOriginalEl.textContent = fmtBytes(totalOriginal);
+  estimateLabelEl.textContent = readyEntries.length > 1
+    ? `Estimate for ${readyEntries.length} images`
+    : 'Estimate';
 
   if (settings.format === 'png') {
     estimateValueEl.textContent = 'PNG · ' + fmtBytes(totalOriginal);
@@ -474,7 +478,12 @@ async function computeEstimate() {
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
-      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      const sampleCtx = canvas.getContext('2d');
+      if (settings.format === 'jpeg') {
+        sampleCtx.fillStyle = '#FFFFFF';
+        sampleCtx.fillRect(0, 0, width, height);
+      }
+      sampleCtx.drawImage(img, 0, 0, width, height);
       const mime = settings.format === 'jpeg' ? 'image/jpeg' : 'image/webp';
       const blob = await toBlobAsync(canvas, mime, settings.quality);
       sampleOriginal += entry.originalSize;
@@ -538,6 +547,12 @@ async function processEntry(entry, settings) {
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
+  if (settings.format === 'jpeg') {
+    // JPEG has no alpha channel — flatten transparency onto white first, or
+    // browsers will render transparent pixels as black.
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, width, height);
+  }
   ctx.drawImage(img, 0, 0, width, height);
 
   const mime = settings.format === 'jpeg' ? 'image/jpeg' : settings.format === 'webp' ? 'image/webp' : 'image/png';
@@ -663,6 +678,7 @@ function showResultsPanel() {
   const isSmaller = totalCompressed < totalOriginal;
   const keptOriginalCount = processed.filter((e) => e.compressedSize >= e.originalSize).length;
   const targetMissedCount = processed.filter((e) => e.targetMissed).length;
+  const savedPct = totalOriginal > 0 ? Math.max(0, Math.round((1 - totalCompressed / totalOriginal) * 100)) : 0;
 
   resultsOriginalEl.textContent = fmtBytes(totalOriginal);
   resultsFinalEl.textContent = fmtBytes(totalCompressed);
@@ -671,7 +687,6 @@ function showResultsPanel() {
   resultsSettingsRecapEl.textContent = 'Current settings: ' + describeSettings(collectSettings());
 
   if (isSmaller) {
-    const savedPct = totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0;
     animateNumber(resultsPctEl, 0, savedPct, '%', 600);
     resultsPctEl.classList.remove('no-reduction');
     resultsHeroLabelEl.textContent = 'smaller';
@@ -679,27 +694,34 @@ function showResultsPanel() {
     resultsFinalEl.classList.remove('no-reduction-color');
     resultsSavedEl.textContent = 'Saved ' + fmtBytes(totalOriginal - totalCompressed);
     resultsSavedEl.hidden = false;
-    resultsNoteEl.hidden = true;
     tryLowerQualityBtn.hidden = true;
   } else {
-    resultsPctEl.textContent = 'No reduction';
+    resultsPctEl.textContent = 'No size reduction';
     resultsPctEl.classList.add('no-reduction');
     resultsHeroLabelEl.hidden = true;
     resultsFinalEl.classList.add('no-reduction-color');
     resultsSavedEl.hidden = true;
-    resultsNoteEl.textContent = processed.length === 1
-      ? 'Compression would increase this file size — keeping the original is recommended.'
-      : 'Compression would increase these file sizes — keeping the originals is recommended.';
-    resultsNoteEl.hidden = false;
     tryLowerQualityBtn.hidden = false;
+  }
+
+  // Note line: no-reduction takes priority; otherwise flag a missed target on a single image.
+  if (!isSmaller) {
+    resultsNoteEl.textContent = processed.length === 1
+      ? 'This image is already highly optimized — keeping the original is recommended.'
+      : 'These images are already highly optimized — keeping the originals is recommended.';
+    resultsNoteEl.hidden = false;
+  } else if (processed.length === 1 && processed[0].targetMissed) {
+    const targetLabel = targetSizeInput.value ? `${targetSizeInput.value} ${targetUnitSelect.value}` : 'the requested target';
+    resultsNoteEl.textContent = `Couldn't fully reach ${targetLabel} without excessive quality loss — closest possible result shown.`;
+    resultsNoteEl.hidden = false;
+  } else {
+    resultsNoteEl.hidden = true;
   }
 
   if (processed.length === 1) {
     // Single image: show output metadata + a compact before/after preview.
     const entry = processed[0];
-    let meta = `${(entry.outFormat || '').toUpperCase()} · ${entry.outWidth}×${entry.outHeight} · ${fmtBytes(entry.compressedSize)}`;
-    if (entry.targetMissed) meta += ' · target not fully reached';
-    resultsMetaEl.textContent = meta;
+    resultsMetaEl.textContent = `${(entry.outFormat || '').toUpperCase()} · ${entry.outWidth}×${entry.outHeight} · ${fmtBytes(entry.compressedSize)}`;
     resultsMetaEl.hidden = false;
     resultsCountLineEl.hidden = true;
 
@@ -718,9 +740,11 @@ function showResultsPanel() {
     }
   } else {
     resultsMetaEl.hidden = true;
-    let countText = `${processed.length} images compressed`;
-    if (keptOriginalCount > 0) countText += ` · ${keptOriginalCount} kept at original size`;
-    if (targetMissedCount > 0) countText += ` · ${targetMissedCount} didn't fully reach target`;
+
+    const outcomeText = isSmaller ? `${savedPct}% smaller` : 'no size reduction';
+    let countText = `${processed.length} images • ${fmtBytes(totalOriginal)} → ${fmtBytes(totalCompressed)} • ${outcomeText}`;
+    if (keptOriginalCount > 0) countText += ` (${keptOriginalCount} kept at original size)`;
+    if (targetMissedCount > 0) countText += ` (${targetMissedCount} below target goal)`;
     resultsCountLineEl.textContent = countText;
     resultsCountLineEl.hidden = false;
     resultsPreviewEl.hidden = true;
