@@ -122,12 +122,18 @@ let idCounter = 0;
 
 const dropZone = document.getElementById('dropZone');
 const fileInput = document.getElementById('fileInput');
+const previewBar = document.getElementById('previewBar');
+const previewThumbsEl = document.getElementById('previewThumbs');
+const previewCountEl = document.getElementById('previewCount');
+const addMoreBtn = document.getElementById('addMoreBtn');
+const clearAllBtn = document.getElementById('clearAllBtn');
 const fileListEl = document.getElementById('fileList');
 const summaryEl = document.getElementById('summary');
 const formatSelect = document.getElementById('formatSelect');
 const qualitySlider = document.getElementById('qualitySlider');
 const qualityValueLabel = document.getElementById('qualityValueLabel');
 const qualityGroup = document.getElementById('qualityGroup');
+const qualitySectionLabel = document.getElementById('qualitySectionLabel');
 const targetGroup = document.getElementById('targetGroup');
 const targetSizeInput = document.getElementById('targetSizeInput');
 const targetUnitSelect = document.getElementById('targetUnitSelect');
@@ -135,6 +141,17 @@ const maxWidthInput = document.getElementById('maxWidthInput');
 const processAllBtn = document.getElementById('processAllBtn');
 const downloadZipBtn = document.getElementById('downloadZipBtn');
 const pngNote = document.getElementById('pngNote');
+const estimateBox = document.getElementById('estimateBox');
+const estimateValueEl = document.getElementById('estimateValue');
+const estimateReductionEl = document.getElementById('estimateReduction');
+const progressWrap = document.getElementById('progressWrap');
+const progressFill = document.getElementById('progressFill');
+const progressStatusText = document.getElementById('progressStatusText');
+const resultsPanel = document.getElementById('resultsPanel');
+const resultsCountEl = document.getElementById('resultsCount');
+const resultsOriginalEl = document.getElementById('resultsOriginal');
+const resultsFinalEl = document.getElementById('resultsFinal');
+const resultsPctEl = document.getElementById('resultsPct');
 
 // ============ Adding files ============
 
@@ -142,7 +159,11 @@ function addFiles(fileList) {
   Array.from(fileList).forEach((file) => {
     if (!file.type.startsWith('image/')) return;
     const id = 'f' + idCounter++;
-    const entry = { id, file, name: file.name, originalSize: file.size, img: null, error: false, compressedBlob: null, compressedSize: null, outFormat: null };
+    const entry = {
+      id, file, name: file.name, originalSize: file.size, img: null, error: false,
+      compressedBlob: null, compressedSize: null, outFormat: null,
+      outWidth: null, outHeight: null, compareUrl: null
+    };
     state.entries.push(entry);
     renderFileRow(entry);
 
@@ -152,21 +173,45 @@ function addFiles(fileList) {
       img.onload = () => {
         entry.img = img;
         renderFileRow(entry);
+        updatePreviewBar();
+        updateProcessButtonState();
+        scheduleEstimate();
       };
       img.onerror = () => {
         entry.error = true;
         renderFileRow(entry);
+        updateProcessButtonState();
       };
       img.src = reader.result;
     };
     reader.onerror = () => {
       entry.error = true;
       renderFileRow(entry);
+      updateProcessButtonState();
     };
     reader.readAsDataURL(file);
   });
   updateProcessButtonState();
   updateSummary();
+  updateDropZoneVisibility();
+  updatePreviewBar();
+}
+
+function removeEntry(id) {
+  const entry = state.entries.find((en) => en.id === id);
+  if (entry && entry.compareUrl) URL.revokeObjectURL(entry.compareUrl);
+  state.entries = state.entries.filter((en) => en.id !== id);
+  const row = document.getElementById('row-' + id);
+  if (row) row.remove();
+  updateSummary();
+  updateProcessButtonState();
+  updateDropZoneVisibility();
+  updatePreviewBar();
+  scheduleEstimate();
+  if (state.entries.length === 0) {
+    resultsPanel.classList.remove('visible');
+    downloadZipBtn.disabled = true;
+  }
 }
 
 // ============ Rendering ============
@@ -181,6 +226,7 @@ function renderFileRow(entry) {
   }
 
   if (entry.error) {
+    row.className = 'file-row';
     row.innerHTML = `
       <div class="file-info">
         <p class="file-name">${escapeHtml(entry.name)}</p>
@@ -193,11 +239,13 @@ function renderFileRow(entry) {
     return;
   }
 
+  row.className = 'file-row';
   const thumbSrc = entry.img ? entry.img.src : '';
   const compressedText = entry.compressedSize != null ? fmtBytes(entry.compressedSize) : '—';
   const savedPct = entry.compressedSize != null && entry.originalSize > 0
     ? Math.max(0, Math.round((1 - entry.compressedSize / entry.originalSize) * 100))
     : null;
+  const hasResult = !!entry.compressedBlob;
 
   row.innerHTML = `
     ${thumbSrc ? `<img class="thumb" src="${thumbSrc}" alt="">` : '<div class="thumb thumb-loading"></div>'}
@@ -211,31 +259,124 @@ function renderFileRow(entry) {
       </p>
     </div>
     <div class="file-actions">
-      <button class="row-download" data-id="${entry.id}" ${entry.compressedBlob ? '' : 'disabled'}>Download</button>
+      ${hasResult ? `<button class="row-compare" data-id="${entry.id}" aria-expanded="false">Compare</button>` : ''}
+      <button class="row-download" data-id="${entry.id}" ${hasResult ? '' : 'disabled'}>Download</button>
       <button class="row-remove" data-id="${entry.id}" aria-label="Remove ${escapeHtml(entry.name)}">×</button>
     </div>
+    ${hasResult ? `
+    <div class="compare-panel" id="compare-${entry.id}">
+      <div class="compare-col">
+        <img class="compare-before-img" src="${thumbSrc}" alt="Original">
+        <p class="compare-label">Original</p>
+        <p class="compare-meta">${entry.img.naturalWidth}×${entry.img.naturalHeight} · ${fmtBytes(entry.originalSize)}</p>
+      </div>
+      <div class="compare-col">
+        <img class="compare-after-img" alt="Compressed">
+        <p class="compare-label">Compressed</p>
+        <p class="compare-meta">${entry.outWidth}×${entry.outHeight} · ${(entry.outFormat || '').toUpperCase()} · ${fmtBytes(entry.compressedSize)}</p>
+      </div>
+    </div>` : ''}
   `;
 }
 
+function updatePreviewBar() {
+  const n = state.entries.length;
+  previewCountEl.textContent = n === 0 ? '' : `${n} image${n > 1 ? 's' : ''} selected`;
+  const maxThumbs = 6;
+  const visible = state.entries.slice(0, maxThumbs);
+  const thumbs = visible.map((e) => e.img
+    ? `<img src="${e.img.src}" alt="">`
+    : '<div class="thumb-more">…</div>'
+  ).join('');
+  const extra = n - maxThumbs;
+  previewThumbsEl.innerHTML = thumbs + (extra > 0 ? `<div class="thumb-more">+${extra}</div>` : '');
+}
+
+function updateDropZoneVisibility() {
+  const hasFiles = state.entries.length > 0;
+  dropZone.classList.toggle('has-files', hasFiles);
+  previewBar.classList.toggle('visible', hasFiles);
+}
+
 function updateSummary() {
-  const processed = state.entries.filter((e) => e.compressedSize != null);
-  if (processed.length === 0) {
-    summaryEl.textContent = state.entries.length
-      ? `${state.entries.length} image${state.entries.length > 1 ? 's' : ''} ready — hit "Process all" to compress.`
-      : 'Drop images in to get started.';
-    downloadZipBtn.disabled = true;
-    return;
+  if (state.entries.length === 0) {
+    summaryEl.hidden = false;
+    summaryEl.textContent = 'Drop images in to get started.';
+  } else {
+    summaryEl.hidden = true;
   }
-  const totalOriginal = processed.reduce((s, e) => s + e.originalSize, 0);
-  const totalCompressed = processed.reduce((s, e) => s + e.compressedSize, 0);
-  const savedBytes = Math.max(0, totalOriginal - totalCompressed);
-  const savedPct = totalOriginal > 0 ? Math.round((savedBytes / totalOriginal) * 100) : 0;
-  summaryEl.textContent = `${processed.length}/${state.entries.length} processed — saved ${fmtBytes(savedBytes)} total (${savedPct}%).`;
-  downloadZipBtn.disabled = false;
 }
 
 function updateProcessButtonState() {
-  processAllBtn.disabled = state.entries.length === 0;
+  const ready = state.entries.filter((e) => e.img && !e.error).length;
+  processAllBtn.disabled = ready === 0;
+  processAllBtn.textContent = ready > 0
+    ? `Compress ${ready} image${ready > 1 ? 's' : ''} →`
+    : 'Compress images →';
+}
+
+// ============ Live estimate ============
+
+let estimateTimer = null;
+function scheduleEstimate() {
+  clearTimeout(estimateTimer);
+  estimateTimer = setTimeout(computeEstimate, 250);
+}
+
+async function computeEstimate() {
+  const readyEntries = state.entries.filter((e) => e.img && !e.error);
+  if (readyEntries.length === 0) {
+    estimateBox.hidden = true;
+    return;
+  }
+
+  const settings = collectSettings();
+  const totalOriginal = readyEntries.reduce((s, e) => s + e.originalSize, 0);
+
+  if (settings.format === 'png') {
+    estimateValueEl.textContent = fmtBytes(totalOriginal);
+    estimateReductionEl.textContent = 'lossless';
+    estimateBox.hidden = false;
+    return;
+  }
+
+  let estimatedTotal;
+
+  if (settings.mode === 'target' && settings.targetBytes > 0) {
+    estimatedTotal = readyEntries.reduce((s, e) => s + Math.min(e.originalSize, settings.targetBytes), 0);
+  } else {
+    // Sample a handful of real files at the chosen quality and extrapolate the ratio.
+    const sample = readyEntries.slice(0, 4);
+    let sampleOriginal = 0;
+    let sampleCompressed = 0;
+    for (const entry of sample) {
+      const img = entry.img;
+      let width = img.naturalWidth;
+      let height = img.naturalHeight;
+      if (settings.maxWidth && width > settings.maxWidth) {
+        const scale = settings.maxWidth / width;
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      const mime = settings.format === 'jpeg' ? 'image/jpeg' : 'image/webp';
+      const blob = await toBlobAsync(canvas, mime, settings.quality);
+      sampleOriginal += entry.originalSize;
+      sampleCompressed += blob.size;
+    }
+    const ratio = sampleOriginal > 0 ? sampleCompressed / sampleOriginal : 1;
+    estimatedTotal = Math.round(totalOriginal * ratio);
+  }
+
+  const reduction = totalOriginal > 0
+    ? Math.max(0, Math.round((1 - estimatedTotal / totalOriginal) * 100))
+    : 0;
+  estimateValueEl.textContent = '~' + fmtBytes(estimatedTotal);
+  estimateReductionEl.textContent = '~' + reduction + '% smaller';
+  estimateBox.hidden = false;
 }
 
 // ============ Processing ============
@@ -302,26 +443,76 @@ async function processEntry(entry, settings) {
     blob = await toBlobAsync(canvas, mime, settings.quality);
   }
 
+  if (entry.compareUrl) {
+    URL.revokeObjectURL(entry.compareUrl);
+    entry.compareUrl = null;
+  }
+
   entry.compressedBlob = blob;
   entry.compressedSize = blob.size;
   entry.outFormat = settings.format;
+  entry.outWidth = width;
+  entry.outHeight = height;
 }
 
 async function processAll() {
   const settings = collectSettings();
-  processAllBtn.disabled = true;
-  processAllBtn.textContent = 'Processing…';
+  const toProcess = state.entries.filter((e) => e.img && !e.error);
+  if (toProcess.length === 0) return;
 
-  for (const entry of state.entries) {
-    if (!entry.img || entry.error) continue;
+  processAllBtn.disabled = true;
+  resultsPanel.classList.remove('visible');
+  progressWrap.hidden = false;
+  progressFill.style.width = '0%';
+  progressStatusText.textContent = `0 / ${toProcess.length} images`;
+
+  for (let i = 0; i < toProcess.length; i++) {
+    const entry = toProcess[i];
     await processEntry(entry, settings);
     renderFileRow(entry);
-    updateSummary();
+    const pct = Math.round(((i + 1) / toProcess.length) * 100);
+    progressFill.style.width = pct + '%';
+    progressStatusText.textContent = `${i + 1} / ${toProcess.length} images`;
   }
 
-  processAllBtn.disabled = false;
-  processAllBtn.textContent = 'Process all';
+  progressWrap.hidden = true;
   updateProcessButtonState();
+  showResultsPanel();
+}
+
+function showResultsPanel() {
+  const processed = state.entries.filter((e) => e.compressedSize != null);
+  if (!processed.length) return;
+  const totalOriginal = processed.reduce((s, e) => s + e.originalSize, 0);
+  const totalCompressed = processed.reduce((s, e) => s + e.compressedSize, 0);
+  const savedPct = totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0;
+
+  resultsCountEl.textContent = processed.length;
+  resultsOriginalEl.textContent = fmtBytes(totalOriginal);
+  resultsFinalEl.textContent = fmtBytes(totalCompressed);
+  resultsPctEl.textContent = Math.max(0, savedPct) + '%';
+  resultsPanel.classList.add('visible');
+  downloadZipBtn.disabled = false;
+}
+
+function toggleCompare(id) {
+  const entry = state.entries.find((en) => en.id === id);
+  if (!entry || !entry.compressedBlob) return;
+  const panel = document.getElementById('compare-' + id);
+  const row = document.getElementById('row-' + id);
+  const btn = document.querySelector(`.row-compare[data-id="${id}"]`);
+  if (!panel) return;
+
+  const nowVisible = !panel.classList.contains('visible');
+  panel.classList.toggle('visible', nowVisible);
+  if (row) row.classList.toggle('expanded', nowVisible);
+  if (btn) btn.setAttribute('aria-expanded', String(nowVisible));
+
+  if (nowVisible && !entry.compareUrl) {
+    entry.compareUrl = URL.createObjectURL(entry.compressedBlob);
+    const afterImg = panel.querySelector('.compare-after-img');
+    if (afterImg) afterImg.src = entry.compareUrl;
+  }
 }
 
 // ============ Event wiring ============
@@ -343,30 +534,48 @@ fileInput.addEventListener('change', (e) => {
   e.target.value = ''; // allow re-selecting the same file(s) again later
 });
 
+addMoreBtn.addEventListener('click', () => fileInput.click());
+
+clearAllBtn.addEventListener('click', () => {
+  state.entries.forEach((e) => { if (e.compareUrl) URL.revokeObjectURL(e.compareUrl); });
+  state.entries = [];
+  fileListEl.innerHTML = '';
+  updateSummary();
+  updateProcessButtonState();
+  updateDropZoneVisibility();
+  updatePreviewBar();
+  resultsPanel.classList.remove('visible');
+  downloadZipBtn.disabled = true;
+  progressWrap.hidden = true;
+  estimateBox.hidden = true;
+});
+
 fileListEl.addEventListener('click', (e) => {
   const id = e.target.dataset.id;
   if (!id) return;
   if (e.target.classList.contains('row-remove')) {
-    state.entries = state.entries.filter((en) => en.id !== id);
-    const row = document.getElementById('row-' + id);
-    if (row) row.remove();
-    updateSummary();
-    updateProcessButtonState();
+    removeEntry(id);
   } else if (e.target.classList.contains('row-download')) {
     const entry = state.entries.find((en) => en.id === id);
     if (entry && entry.compressedBlob) {
       const ext = entry.outFormat === 'jpeg' ? 'jpg' : entry.outFormat;
       downloadBlob(entry.compressedBlob, baseName(entry.name) + '-quantized.' + ext);
     }
+  } else if (e.target.classList.contains('row-compare')) {
+    toggleCompare(id);
   }
 });
 
 qualitySlider.addEventListener('input', () => {
   qualityValueLabel.textContent = qualitySlider.value + '%';
+  scheduleEstimate();
 });
 
 document.querySelectorAll('input[name="mode"]').forEach((radio) => {
-  radio.addEventListener('change', updateModeVisibility);
+  radio.addEventListener('change', () => {
+    updateModeVisibility();
+    scheduleEstimate();
+  });
 });
 
 function updateModeVisibility() {
@@ -374,6 +583,7 @@ function updateModeVisibility() {
   const mode = modeInput ? modeInput.value : 'quality';
   qualityGroup.hidden = mode !== 'quality';
   targetGroup.hidden = mode !== 'target';
+  qualitySectionLabel.textContent = mode === 'target' ? 'Target size' : 'Quality';
 }
 
 formatSelect.addEventListener('change', () => {
@@ -385,7 +595,12 @@ formatSelect.addEventListener('change', () => {
     document.querySelector('input[name="mode"][value="quality"]').checked = true;
     updateModeVisibility();
   }
+  scheduleEstimate();
 });
+
+maxWidthInput.addEventListener('input', scheduleEstimate);
+targetSizeInput.addEventListener('input', scheduleEstimate);
+targetUnitSelect.addEventListener('change', scheduleEstimate);
 
 processAllBtn.addEventListener('click', processAll);
 
@@ -393,6 +608,7 @@ downloadZipBtn.addEventListener('click', async () => {
   const processed = state.entries.filter((e) => e.compressedBlob);
   if (!processed.length) return;
   downloadZipBtn.disabled = true;
+  const originalLabel = downloadZipBtn.textContent;
   downloadZipBtn.textContent = 'Zipping…';
 
   const zipFiles = [];
@@ -407,7 +623,7 @@ downloadZipBtn.addEventListener('click', async () => {
   const zipBlob = await buildZip(zipFiles);
   downloadBlob(zipBlob, 'quantize-export.zip');
   downloadZipBtn.disabled = false;
-  downloadZipBtn.textContent = 'Download all (.zip)';
+  downloadZipBtn.textContent = originalLabel;
 });
 
 // ============ Init ============
@@ -415,3 +631,5 @@ downloadZipBtn.addEventListener('click', async () => {
 updateModeVisibility();
 updateSummary();
 updateProcessButtonState();
+updateDropZoneVisibility();
+updatePreviewBar();
