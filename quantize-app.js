@@ -761,6 +761,7 @@ function showResultsPanel() {
       downloadAnywayBtn.hidden = true;
       resultsDownloadSummaryTextEl.textContent = `${exportName} · ${fmtBytes(entry.compressedSize)}`;
     }
+    resultsDownloadSummaryTextEl.title = resultsDownloadSummaryTextEl.textContent;
     resultsDownloadSummaryEl.hidden = false;
   } else {
     resultsMetaEl.hidden = true;
@@ -775,6 +776,7 @@ function showResultsPanel() {
     downloadAnywayBtn.hidden = true;
 
     resultsDownloadSummaryTextEl.textContent = `quantize-export.zip · ${processed.length} files · ${fmtBytes(totalCompressed)} total`;
+    resultsDownloadSummaryTextEl.title = resultsDownloadSummaryTextEl.textContent;
     resultsDownloadSummaryEl.hidden = false;
 
     downloadZipBtn.textContent = `Download ZIP (${processed.length} image${processed.length > 1 ? 's' : ''}) →`;

@@ -314,9 +314,12 @@ select:disabled, input:disabled { opacity: .5; cursor: not-allowed; }
 .results-download-summary {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
   font-family: var(--mono); font-size: .78rem; color: var(--muted);
-  margin: 0 0 8px; padding: 7px 11px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  margin: 0 0 8px; padding: 6px 10px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
 }
 .results-download-summary[hidden] { display: none; }
+.results-download-summary span:first-child {
+  flex: 1 1 auto; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0;
+}
 .copy-btn {
   font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .04em;
   padding: 4px 10px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel);
