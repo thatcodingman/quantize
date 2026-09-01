@@ -149,6 +149,7 @@ const progressWrap = document.getElementById('progressWrap');
 const progressFill = document.getElementById('progressFill');
 const progressStatusText = document.getElementById('progressStatusText');
 const resultsPanel = document.getElementById('resultsPanel');
+const ctaBlock = document.getElementById('ctaBlock');
 const resultsOriginalEl = document.getElementById('resultsOriginal');
 const resultsFinalEl = document.getElementById('resultsFinal');
 const resultsPctEl = document.getElementById('resultsPct');
@@ -210,6 +211,13 @@ function setControlsLocked(locked) {
 // ============ Adding files ============
 
 function addFiles(fileList) {
+  // If a completed result is showing, new files mean a new batch — surface the
+  // compress controls again instead of leaving a stale result behind them.
+  if (resultsPanel.classList.contains('visible')) {
+    resultsPanel.classList.remove('visible');
+    ctaBlock.hidden = false;
+  }
+
   let skipped = 0;
   Array.from(fileList).forEach((file) => {
     if (!file.type.startsWith('image/')) { skipped++; return; }
@@ -294,6 +302,7 @@ function removeEntry(id) {
   scheduleEstimate();
   if (state.entries.length === 0) {
     resultsPanel.classList.remove('visible');
+    ctaBlock.hidden = false;
     downloadZipBtn.disabled = true;
   }
 }
@@ -369,7 +378,7 @@ function renderFileRow(entry) {
     </div>
     <div class="file-actions">
       ${hasResult ? `<button class="row-compare" data-id="${entry.id}" aria-expanded="false">Compare</button>` : ''}
-      <button class="row-download" data-id="${entry.id}" ${hasResult ? '' : 'disabled'}>${hasResult && entry.compressedSize >= entry.originalSize ? 'Download original' : 'Download'}</button>
+      <button class="row-download" data-id="${entry.id}" ${hasResult ? '' : 'disabled title="Compress this image first to enable download"'}>${hasResult && entry.compressedSize >= entry.originalSize ? 'Download original' : 'Download'}</button>
       <button class="row-remove" data-id="${entry.id}" aria-label="Remove ${escapeHtml(entry.name)}">×</button>
     </div>
     ${hasResult ? `
@@ -619,6 +628,7 @@ async function processAll() {
   processAllBtn.textContent = 'Compressing…';
   setControlsLocked(true);
   resultsPanel.classList.remove('visible');
+  ctaBlock.hidden = true;
   estimateBox.hidden = true;
   progressWrap.hidden = false;
   progressFill.style.width = '0%';
@@ -769,6 +779,7 @@ function showResultsPanel() {
   }
 
   resultsPanel.classList.add('visible');
+  ctaBlock.hidden = true;
   downloadZipBtn.disabled = false;
 }
 
@@ -925,6 +936,7 @@ clearAllBtn.addEventListener('click', () => {
   updateDropZoneVisibility();
   updatePreviewBar();
   resultsPanel.classList.remove('visible');
+  ctaBlock.hidden = false;
   downloadZipBtn.disabled = true;
   progressWrap.hidden = true;
   estimateBox.hidden = true;
