@@ -146,6 +146,7 @@ main { max-width: 1040px; margin: 0 auto; padding: 0 32px; }
 }
 .control-row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; margin-bottom: 18px; }
 .control-row:last-child { margin-bottom: 0; }
+.control-row[hidden] { display: none; }
 .control-group label {
   display: block; font-family: var(--mono); font-size: .7rem; text-transform: uppercase;
   letter-spacing: .05em; color: var(--muted); margin-bottom: 8px;
@@ -187,10 +188,12 @@ main { max-width: 1040px; margin: 0 auto; padding: 0 32px; }
 }
 .estimate-box[hidden] { display: none; }
 .estimate-label { font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: block; margin-bottom: 6px; }
-.estimate-line { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.estimate-line { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+.estimate-col { display: flex; flex-direction: column; gap: 2px; }
+.estimate-tag { font-size: .62rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
 .estimate-original { font-size: .92rem; color: var(--muted); }
 .estimate-value { font-size: .98rem; color: var(--ink); font-weight: 700; }
-.estimate-savings { font-family: var(--display); font-size: 1.15rem; font-weight: 800; color: var(--after); margin-top: 4px; }
+.estimate-savings { font-family: var(--display); font-size: 1.15rem; font-weight: 800; color: var(--after); margin-top: 8px; }
 
 .action-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
 button.primary {

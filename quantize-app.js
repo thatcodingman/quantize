@@ -298,6 +298,7 @@ function renderFileRow(entry) {
         <p class="file-error">Compression failed — try a different quality, format, or target size.</p>
       </div>
       <div class="file-actions">
+        <button class="row-retry" data-id="${entry.id}">Retry</button>
         <button class="row-remove" data-id="${entry.id}" aria-label="Remove ${escapeHtml(entry.name)}">×</button>
       </div>
     `;
@@ -395,7 +396,7 @@ async function computeEstimate() {
   estimateOriginalEl.textContent = fmtBytes(totalOriginal);
 
   if (settings.format === 'png') {
-    estimateValueEl.textContent = fmtBytes(totalOriginal);
+    estimateValueEl.textContent = 'PNG · ' + fmtBytes(totalOriginal);
     estimateReductionEl.textContent = 'Lossless — output size stays about the same';
     estimateBox.hidden = false;
     return;
@@ -433,6 +434,9 @@ async function computeEstimate() {
   }
 
   estimateValueEl.textContent = '~' + fmtBytes(estimatedTotal);
+  if (settings.format !== 'png') {
+    estimateValueEl.textContent = settings.format.toUpperCase() + ' · ~' + fmtBytes(estimatedTotal);
+  }
 
   if (estimatedTotal >= totalOriginal) {
     estimateReductionEl.textContent = 'No size reduction expected at these settings';
@@ -525,6 +529,7 @@ async function processAll() {
   if (toProcess.length === 0) return;
 
   processAllBtn.disabled = true;
+  processAllBtn.textContent = 'Compressing…';
   setControlsLocked(true);
   resultsPanel.classList.remove('visible');
   estimateBox.hidden = true;
@@ -585,6 +590,22 @@ function showResultsPanel() {
   resultsPanel.classList.add('visible');
   downloadZipBtn.disabled = false;
   downloadZipBtn.textContent = processed.length > 1 ? 'Download ZIP →' : 'Download image →';
+}
+
+async function retryEntry(id) {
+  const entry = state.entries.find((en) => en.id === id);
+  if (!entry || !entry.img) return;
+  const settings = collectSettings();
+  entry.status = 'processing';
+  renderFileRow(entry);
+  try {
+    await processEntry(entry, settings);
+    entry.status = 'done';
+  } catch (err) {
+    entry.status = 'failed';
+  }
+  renderFileRow(entry);
+  if (entry.status === 'done') showResultsPanel();
 }
 
 function toggleCompare(id) {
@@ -666,6 +687,8 @@ fileListEl.addEventListener('click', (e) => {
     }
   } else if (e.target.classList.contains('row-compare')) {
     toggleCompare(id);
+  } else if (e.target.classList.contains('row-retry')) {
+    retryEntry(id);
   }
 });
 
