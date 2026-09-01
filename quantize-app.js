@@ -152,6 +152,31 @@ const resultsCountEl = document.getElementById('resultsCount');
 const resultsOriginalEl = document.getElementById('resultsOriginal');
 const resultsFinalEl = document.getElementById('resultsFinal');
 const resultsPctEl = document.getElementById('resultsPct');
+const compressAgainBtn = document.getElementById('compressAgainBtn');
+const addMoreResultsBtn = document.getElementById('addMoreResultsBtn');
+const dropZoneHeadline = document.getElementById('dropZoneHeadline');
+const uploadConfirmEl = document.getElementById('uploadConfirm');
+const progressFileText = document.getElementById('progressFileText');
+const estimateOriginalEl = document.getElementById('estimateOriginal');
+
+const DROP_ZONE_IDLE_HTML = 'Drop images here, or <span class="browse-link">browse files</span>';
+const DROP_ZONE_DRAGOVER_TEXT = 'Release to add images';
+
+// Controls disabled while a batch is processing
+const lockableControls = [
+  formatSelect, maxWidthInput, qualitySlider, targetSizeInput, targetUnitSelect,
+  addMoreBtn, clearAllBtn
+];
+function setControlsLocked(locked) {
+  lockableControls.forEach((el) => { el.disabled = locked; });
+  document.querySelectorAll('input[name="mode"]').forEach((r) => { r.disabled = locked; });
+  dropZone.style.pointerEvents = locked ? 'none' : '';
+  if (!locked) {
+    // Re-apply the PNG/target-mode restriction now that controls are unlocked again.
+    const targetRadio = document.querySelector('input[name="mode"][value="target"]');
+    targetRadio.disabled = formatSelect.value === 'png';
+  }
+}
 
 // ============ Adding files ============
 
@@ -162,7 +187,7 @@ function addFiles(fileList) {
     const entry = {
       id, file, name: file.name, originalSize: file.size, img: null, error: false,
       compressedBlob: null, compressedSize: null, outFormat: null,
-      outWidth: null, outHeight: null, compareUrl: null
+      outWidth: null, outHeight: null, compareUrl: null, status: 'ready'
     };
     state.entries.push(entry);
     renderFileRow(entry);
@@ -195,6 +220,13 @@ function addFiles(fileList) {
   updateSummary();
   updateDropZoneVisibility();
   updatePreviewBar();
+  flashUploadConfirm();
+}
+
+function flashUploadConfirm() {
+  uploadConfirmEl.classList.add('show');
+  clearTimeout(flashUploadConfirm._timer);
+  flashUploadConfirm._timer = setTimeout(() => uploadConfirmEl.classList.remove('show'), 1200);
 }
 
 function removeEntry(id) {
@@ -246,6 +278,8 @@ function renderFileRow(entry) {
     ? Math.max(0, Math.round((1 - entry.compressedSize / entry.originalSize) * 100))
     : null;
   const hasResult = !!entry.compressedBlob;
+  const statusLabels = { ready: 'Ready', processing: 'Compressing…', done: 'Done' };
+  const statusText = statusLabels[entry.status] || 'Ready';
 
   row.innerHTML = `
     ${thumbSrc ? `<img class="thumb" src="${thumbSrc}" alt="">` : '<div class="thumb thumb-loading"></div>'}
@@ -256,6 +290,7 @@ function renderFileRow(entry) {
         <span class="arrow">→</span>
         <span class="size-after">${compressedText}</span>
         ${savedPct !== null ? `<span class="saved-pct">−${savedPct}%</span>` : ''}
+        <span class="file-status status-${entry.status}">${statusText}</span>
       </p>
     </div>
     <div class="file-actions">
@@ -324,6 +359,8 @@ function scheduleEstimate() {
 }
 
 async function computeEstimate() {
+  if (!progressWrap.hidden) return; // don't recompute mid-batch
+
   const readyEntries = state.entries.filter((e) => e.img && !e.error);
   if (readyEntries.length === 0) {
     estimateBox.hidden = true;
@@ -332,6 +369,7 @@ async function computeEstimate() {
 
   const settings = collectSettings();
   const totalOriginal = readyEntries.reduce((s, e) => s + e.originalSize, 0);
+  estimateOriginalEl.textContent = fmtBytes(totalOriginal);
 
   if (settings.format === 'png') {
     estimateValueEl.textContent = fmtBytes(totalOriginal);
@@ -461,23 +499,46 @@ async function processAll() {
   if (toProcess.length === 0) return;
 
   processAllBtn.disabled = true;
+  setControlsLocked(true);
   resultsPanel.classList.remove('visible');
+  estimateBox.hidden = true;
   progressWrap.hidden = false;
   progressFill.style.width = '0%';
   progressStatusText.textContent = `0 / ${toProcess.length} images`;
+  progressFileText.textContent = '';
 
   for (let i = 0; i < toProcess.length; i++) {
     const entry = toProcess[i];
-    await processEntry(entry, settings);
+    entry.status = 'processing';
     renderFileRow(entry);
+    progressFileText.textContent = `Compressing ${entry.name}…`;
+
+    await processEntry(entry, settings);
+    entry.status = 'done';
+    renderFileRow(entry);
+
     const pct = Math.round(((i + 1) / toProcess.length) * 100);
     progressFill.style.width = pct + '%';
     progressStatusText.textContent = `${i + 1} / ${toProcess.length} images`;
   }
 
+  progressFileText.textContent = '';
   progressWrap.hidden = true;
+  setControlsLocked(false);
   updateProcessButtonState();
   showResultsPanel();
+}
+
+function animateNumber(el, from, to, suffix, duration) {
+  const start = performance.now();
+  function tick(now) {
+    const progress = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+    const value = Math.round(from + (to - from) * eased);
+    el.textContent = value + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 }
 
 function showResultsPanel() {
@@ -485,12 +546,12 @@ function showResultsPanel() {
   if (!processed.length) return;
   const totalOriginal = processed.reduce((s, e) => s + e.originalSize, 0);
   const totalCompressed = processed.reduce((s, e) => s + e.compressedSize, 0);
-  const savedPct = totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0;
+  const savedPct = Math.max(0, totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0);
 
-  resultsCountEl.textContent = processed.length;
   resultsOriginalEl.textContent = fmtBytes(totalOriginal);
   resultsFinalEl.textContent = fmtBytes(totalCompressed);
-  resultsPctEl.textContent = Math.max(0, savedPct) + '%';
+  animateNumber(resultsCountEl, 0, processed.length, '', 500);
+  animateNumber(resultsPctEl, 0, savedPct, '%', 600);
   resultsPanel.classList.add('visible');
   downloadZipBtn.disabled = false;
 }
@@ -521,11 +582,16 @@ dropZone.addEventListener('click', () => fileInput.click());
 dropZone.addEventListener('dragover', (e) => {
   e.preventDefault();
   dropZone.classList.add('dragover');
+  dropZoneHeadline.textContent = DROP_ZONE_DRAGOVER_TEXT;
 });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('dragleave', () => {
+  dropZone.classList.remove('dragover');
+  dropZoneHeadline.innerHTML = DROP_ZONE_IDLE_HTML;
+});
 dropZone.addEventListener('drop', (e) => {
   e.preventDefault();
   dropZone.classList.remove('dragover');
+  dropZoneHeadline.innerHTML = DROP_ZONE_IDLE_HTML;
   if (e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
 });
 
@@ -625,6 +691,13 @@ downloadZipBtn.addEventListener('click', async () => {
   downloadZipBtn.disabled = false;
   downloadZipBtn.textContent = originalLabel;
 });
+
+compressAgainBtn.addEventListener('click', () => {
+  resultsPanel.classList.remove('visible');
+  processAll();
+});
+
+addMoreResultsBtn.addEventListener('click', () => fileInput.click());
 
 // ============ Init ============
 
