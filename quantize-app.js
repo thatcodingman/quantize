@@ -739,7 +739,8 @@ function showResultsPanel() {
   if (processed.length === 1) {
     // Single image: show output metadata + a compact before/after preview.
     const entry = processed[0];
-    resultsMetaEl.textContent = `${(entry.outFormat || '').toUpperCase()} · ${entry.outWidth}×${entry.outHeight} · ${fmtBytes(entry.compressedSize)}`;
+    const dimsUnchanged = entry.outWidth === entry.img.naturalWidth && entry.outHeight === entry.img.naturalHeight;
+    resultsMetaEl.textContent = `${(entry.outFormat || '').toUpperCase()} · ${entry.outWidth}×${entry.outHeight}${dimsUnchanged ? ' (unchanged)' : ''} · ${fmtBytes(entry.compressedSize)}`;
     resultsMetaEl.hidden = false;
     resultsCountLineEl.hidden = true;
 
