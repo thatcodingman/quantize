@@ -161,6 +161,10 @@ const resultsHeroLabelEl = document.getElementById('resultsHeroLabel');
 const resultsNoteEl = document.getElementById('resultsNote');
 const tryLowerQualityBtn = document.getElementById('tryLowerQualityBtn');
 const resultsSavedEl = document.getElementById('resultsSaved');
+const resultsReadyEl = document.getElementById('resultsReady');
+const resultsDownloadSummaryEl = document.getElementById('resultsDownloadSummary');
+const resultsDownloadSummaryTextEl = document.getElementById('resultsDownloadSummaryText');
+const copyResultInfoBtn = document.getElementById('copyResultInfoBtn');
 const downloadAnywayBtn = document.getElementById('downloadAnywayBtn');
 const resultsSettingsRecapEl = document.getElementById('resultsSettingsRecap');
 const keepOriginalNameCheckbox = document.getElementById('keepOriginalNameCheckbox');
@@ -692,15 +696,19 @@ function showResultsPanel() {
     resultsHeroLabelEl.textContent = 'smaller';
     resultsHeroLabelEl.hidden = false;
     resultsFinalEl.classList.remove('no-reduction-color');
-    resultsSavedEl.textContent = 'Saved ' + fmtBytes(totalOriginal - totalCompressed);
+    resultsSavedEl.textContent = `Saved ${fmtBytes(totalOriginal - totalCompressed)} (${savedPct}%)`;
     resultsSavedEl.hidden = false;
+    resultsReadyEl.textContent = '● Ready to download';
+    resultsReadyEl.hidden = false;
     tryLowerQualityBtn.hidden = true;
   } else {
-    resultsPctEl.textContent = 'No size reduction';
+    resultsPctEl.textContent = 'No savings — original is smaller';
     resultsPctEl.classList.add('no-reduction');
     resultsHeroLabelEl.hidden = true;
     resultsFinalEl.classList.add('no-reduction-color');
     resultsSavedEl.hidden = true;
+    resultsReadyEl.textContent = '● Original ready to download';
+    resultsReadyEl.hidden = false;
     tryLowerQualityBtn.hidden = false;
   }
 
@@ -730,14 +738,18 @@ function showResultsPanel() {
     resultsAfterImg.src = entry.compareUrl;
     resultsPreviewEl.hidden = false;
 
+    const { name: exportName } = getExportForEntry(entry);
     if (entry.compressedSize >= entry.originalSize) {
-      downloadZipBtn.textContent = 'Keep original →';
+      downloadZipBtn.textContent = 'Use original →';
       downloadAnywayBtn.hidden = false;
       downloadAnywayBtn.textContent = `Download compressed version anyway (${fmtBytes(entry.compressedSize)})`;
+      resultsDownloadSummaryTextEl.textContent = `${exportName} · ${fmtBytes(entry.originalSize)}`;
     } else {
       downloadZipBtn.textContent = 'Download image →';
       downloadAnywayBtn.hidden = true;
+      resultsDownloadSummaryTextEl.textContent = `${exportName} · ${fmtBytes(entry.compressedSize)}`;
     }
+    resultsDownloadSummaryEl.hidden = false;
   } else {
     resultsMetaEl.hidden = true;
 
@@ -749,6 +761,9 @@ function showResultsPanel() {
     resultsCountLineEl.hidden = false;
     resultsPreviewEl.hidden = true;
     downloadAnywayBtn.hidden = true;
+
+    resultsDownloadSummaryTextEl.textContent = `quantize-export.zip · ${processed.length} files · ${fmtBytes(totalCompressed)} total`;
+    resultsDownloadSummaryEl.hidden = false;
 
     downloadZipBtn.textContent = `Download ZIP (${processed.length} image${processed.length > 1 ? 's' : ''}) →`;
   }
@@ -1046,6 +1061,22 @@ downloadAnywayBtn.addEventListener('click', () => {
   const entry = processed[0];
   const ext = entry.outFormat === 'jpeg' ? 'jpg' : entry.outFormat;
   downloadBlob(entry.compressedBlob, baseName(entry.name) + '-quantized.' + ext);
+});
+
+copyResultInfoBtn.addEventListener('click', async () => {
+  const text = resultsDownloadSummaryTextEl.textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    copyResultInfoBtn.textContent = 'Copied';
+    copyResultInfoBtn.classList.add('copied');
+  } catch (err) {
+    copyResultInfoBtn.textContent = 'Copy failed';
+  }
+  clearTimeout(copyResultInfoBtn._timer);
+  copyResultInfoBtn._timer = setTimeout(() => {
+    copyResultInfoBtn.textContent = 'Copy';
+    copyResultInfoBtn.classList.remove('copied');
+  }, 1500);
 });
 
 compressAgainBtn.addEventListener('click', () => {

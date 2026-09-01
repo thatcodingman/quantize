@@ -196,6 +196,7 @@
           <span class="accent" id="resultsFinal">0 B</span>
         </p>
         <p class="results-saved" id="resultsSaved" hidden></p>
+        <p class="results-ready" id="resultsReady" hidden>● Ready to download</p>
         <p class="results-note" id="resultsNote" hidden></p>
         <p class="results-meta" id="resultsMeta" hidden></p>
         <p class="results-count" id="resultsCountLine" hidden></p>
@@ -203,13 +204,18 @@
         <div class="results-preview" id="resultsPreview" hidden>
           <div class="results-preview-col">
             <img id="resultsBeforeImg" alt="Original">
-            <span class="compare-label">Before</span>
+            <span class="compare-label">Original</span>
           </div>
           <div class="results-preview-col">
             <img id="resultsAfterImg" alt="Compressed">
-            <span class="compare-label">After</span>
+            <span class="compare-label">Compressed</span>
           </div>
         </div>
+
+        <p class="results-download-summary" id="resultsDownloadSummary" hidden>
+          <span id="resultsDownloadSummaryText"></span>
+          <button type="button" class="copy-btn" id="copyResultInfoBtn">Copy</button>
+        </p>
 
         <button class="secondary" id="tryLowerQualityBtn" hidden>Try lower quality</button>
         <button class="primary cta-big results-download-btn" id="downloadZipBtn" disabled>Download image →</button>

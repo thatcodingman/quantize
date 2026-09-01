@@ -281,6 +281,11 @@ select:disabled, input:disabled { opacity: .5; cursor: not-allowed; }
 .results-tag { font-family: var(--mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-right: 4px; }
 .results-saved { font-family: var(--mono); font-size: .86rem; color: var(--after); font-weight: 700; margin: 0 0 10px; }
 .results-saved[hidden] { display: none; }
+.results-ready {
+  font-family: var(--mono); font-size: .76rem; color: var(--after); margin: 0 0 12px;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.results-ready[hidden] { display: none; }
 .results-note { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 0 0 10px; }
 .results-note[hidden] { display: none; }
 .results-meta { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 0 0 10px; }
@@ -300,6 +305,19 @@ select:disabled, input:disabled { opacity: .5; cursor: not-allowed; }
 .results-preview-col .compare-label { display: block; margin-top: 4px; }
 #tryLowerQualityBtn { width: 100%; margin-bottom: 10px; }
 #tryLowerQualityBtn[hidden] { display: none; }
+.results-download-summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-family: var(--mono); font-size: .78rem; color: var(--muted);
+  margin: 0 0 10px; padding: 8px 12px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+}
+.results-download-summary[hidden] { display: none; }
+.copy-btn {
+  font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .04em;
+  padding: 4px 10px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel);
+  color: var(--ink); cursor: pointer; flex-shrink: 0;
+}
+.copy-btn:hover { border-color: var(--after); color: var(--after); }
+.copy-btn.copied { border-color: var(--after); color: var(--after); }
 .text-link {
   display: block; width: 100%; text-align: center; background: none; border: none;
   font-family: var(--mono); font-size: .78rem; color: var(--muted); text-decoration: underline;
@@ -415,6 +433,7 @@ footer p { color: var(--muted); font-size: .76rem; margin: 0; font-family: var(-
   .control-row { flex-direction: column; align-items: stretch; }
   .file-row { flex-wrap: wrap; }
   .compare-panel.visible { grid-template-columns: 1fr; }
+  .results-preview { grid-template-columns: 1fr; max-width: 100%; }
   .preview-actions { margin-left: 0; width: 100%; justify-content: flex-end; }
 }
 
