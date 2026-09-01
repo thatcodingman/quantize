@@ -158,6 +158,7 @@ const dropZoneHeadline = document.getElementById('dropZoneHeadline');
 const uploadConfirmEl = document.getElementById('uploadConfirm');
 const progressFileText = document.getElementById('progressFileText');
 const estimateOriginalEl = document.getElementById('estimateOriginal');
+const uploadErrorEl = document.getElementById('uploadError');
 
 const DROP_ZONE_IDLE_HTML = 'Drop images here, or <span class="browse-link">browse files</span>';
 const DROP_ZONE_DRAGOVER_TEXT = 'Release to add images';
@@ -181,8 +182,9 @@ function setControlsLocked(locked) {
 // ============ Adding files ============
 
 function addFiles(fileList) {
+  let skipped = 0;
   Array.from(fileList).forEach((file) => {
-    if (!file.type.startsWith('image/')) return;
+    if (!file.type.startsWith('image/')) { skipped++; return; }
     const id = 'f' + idCounter++;
     const entry = {
       id, file, name: file.name, originalSize: file.size, img: null, error: false,
@@ -221,6 +223,13 @@ function addFiles(fileList) {
   updateDropZoneVisibility();
   updatePreviewBar();
   flashUploadConfirm();
+
+  if (skipped > 0) {
+    uploadErrorEl.textContent = `${skipped} file${skipped > 1 ? 's were' : ' was'} skipped — not a supported image type.`;
+    uploadErrorEl.hidden = false;
+  } else {
+    uploadErrorEl.hidden = true;
+  }
 }
 
 function flashUploadConfirm() {
@@ -278,8 +287,22 @@ function renderFileRow(entry) {
     ? Math.max(0, Math.round((1 - entry.compressedSize / entry.originalSize) * 100))
     : null;
   const hasResult = !!entry.compressedBlob;
-  const statusLabels = { ready: 'Ready', processing: 'Compressing…', done: 'Done' };
+  const statusLabels = { ready: 'Ready', processing: 'Compressing…', done: 'Done', failed: 'Failed' };
   const statusText = statusLabels[entry.status] || 'Ready';
+
+  if (entry.status === 'failed') {
+    row.innerHTML = `
+      ${thumbSrc ? `<img class="thumb" src="${thumbSrc}" alt="">` : '<div class="thumb thumb-loading"></div>'}
+      <div class="file-info">
+        <p class="file-name">${escapeHtml(entry.name)}</p>
+        <p class="file-error">Compression failed — try a different quality, format, or target size.</p>
+      </div>
+      <div class="file-actions">
+        <button class="row-remove" data-id="${entry.id}" aria-label="Remove ${escapeHtml(entry.name)}">×</button>
+      </div>
+    `;
+    return;
+  }
 
   row.innerHTML = `
     ${thumbSrc ? `<img class="thumb" src="${thumbSrc}" alt="">` : '<div class="thumb thumb-loading"></div>'}
@@ -373,7 +396,7 @@ async function computeEstimate() {
 
   if (settings.format === 'png') {
     estimateValueEl.textContent = fmtBytes(totalOriginal);
-    estimateReductionEl.textContent = 'lossless';
+    estimateReductionEl.textContent = 'Lossless — output size stays about the same';
     estimateBox.hidden = false;
     return;
   }
@@ -409,11 +432,14 @@ async function computeEstimate() {
     estimatedTotal = Math.round(totalOriginal * ratio);
   }
 
-  const reduction = totalOriginal > 0
-    ? Math.max(0, Math.round((1 - estimatedTotal / totalOriginal) * 100))
-    : 0;
   estimateValueEl.textContent = '~' + fmtBytes(estimatedTotal);
-  estimateReductionEl.textContent = '~' + reduction + '% smaller';
+
+  if (estimatedTotal >= totalOriginal) {
+    estimateReductionEl.textContent = 'No size reduction expected at these settings';
+  } else {
+    const reduction = Math.round((1 - estimatedTotal / totalOriginal) * 100);
+    estimateReductionEl.textContent = '~' + reduction + '% smaller';
+  }
   estimateBox.hidden = false;
 }
 
@@ -513,8 +539,12 @@ async function processAll() {
     renderFileRow(entry);
     progressFileText.textContent = `Compressing ${entry.name}…`;
 
-    await processEntry(entry, settings);
-    entry.status = 'done';
+    try {
+      await processEntry(entry, settings);
+      entry.status = 'done';
+    } catch (err) {
+      entry.status = 'failed';
+    }
     renderFileRow(entry);
 
     const pct = Math.round(((i + 1) / toProcess.length) * 100);
@@ -554,6 +584,7 @@ function showResultsPanel() {
   animateNumber(resultsPctEl, 0, savedPct, '%', 600);
   resultsPanel.classList.add('visible');
   downloadZipBtn.disabled = false;
+  downloadZipBtn.textContent = processed.length > 1 ? 'Download ZIP →' : 'Download image →';
 }
 
 function toggleCompare(id) {
@@ -579,6 +610,12 @@ function toggleCompare(id) {
 // ============ Event wiring ============
 
 dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    fileInput.click();
+  }
+});
 dropZone.addEventListener('dragover', (e) => {
   e.preventDefault();
   dropZone.classList.add('dragover');
@@ -673,6 +710,14 @@ processAllBtn.addEventListener('click', processAll);
 downloadZipBtn.addEventListener('click', async () => {
   const processed = state.entries.filter((e) => e.compressedBlob);
   if (!processed.length) return;
+
+  if (processed.length === 1) {
+    const entry = processed[0];
+    const ext = entry.outFormat === 'jpeg' ? 'jpg' : entry.outFormat;
+    downloadBlob(entry.compressedBlob, baseName(entry.name) + '-quantized.' + ext);
+    return;
+  }
+
   downloadZipBtn.disabled = true;
   const originalLabel = downloadZipBtn.textContent;
   downloadZipBtn.textContent = 'Zipping…';

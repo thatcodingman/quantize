@@ -57,7 +57,7 @@
   </section>
 
   <section class="tool">
-    <div class="drop-zone" id="dropZone">
+    <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Drop images here or press Enter to browse files">
       <svg class="upload-icon" width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M17 22V6M17 6L10 13M17 6L24 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M6 24V27C6 28.1046 6.89543 29 8 29H26C27.1046 29 28 28.1046 28 27V24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -66,6 +66,7 @@
       <p>JPG, PNG, WebP, HEIC-in-browser support varies by device — any image your browser can open</p>
       <input type="file" id="fileInput" accept="image/*" multiple hidden>
     </div>
+    <p class="upload-error" id="uploadError" hidden></p>
 
     <div class="preview-bar" id="previewBar">
       <div class="preview-thumbs" id="previewThumbs"></div>
@@ -136,13 +137,13 @@
 
       <div class="cta-block">
         <div class="estimate-box" id="estimateBox" hidden>
-          <span class="estimate-label">Estimated output</span>
-          <span class="estimate-sizes">
-            <span class="estimate-value" id="estimateOriginal">—</span>
+          <span class="estimate-label">Estimate</span>
+          <div class="estimate-line">
+            <span class="estimate-original" id="estimateOriginal">—</span>
             <span class="arrow">→</span>
-            <span class="estimate-value accent" id="estimateValue">—</span>
-          </span>
-          <span class="estimate-value accent" id="estimateReduction">—</span>
+            <span class="estimate-value" id="estimateValue">—</span>
+          </div>
+          <div class="estimate-savings" id="estimateReduction">—</div>
         </div>
         <div class="action-row">
           <button class="primary cta-big" id="processAllBtn" disabled>Compress images →</button>
