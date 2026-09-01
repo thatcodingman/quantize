@@ -163,6 +163,7 @@ const resultsNoteEl = document.getElementById('resultsNote');
 const tryLowerQualityBtn = document.getElementById('tryLowerQualityBtn');
 const resultsSavedEl = document.getElementById('resultsSaved');
 const resultsReadyEl = document.getElementById('resultsReady');
+const resultsReadyTextEl = document.getElementById('resultsReadyText');
 const resultsDownloadSummaryEl = document.getElementById('resultsDownloadSummary');
 const resultsDownloadSummaryTextEl = document.getElementById('resultsDownloadSummaryText');
 const copyResultInfoBtn = document.getElementById('copyResultInfoBtn');
@@ -708,7 +709,7 @@ function showResultsPanel() {
     resultsFinalEl.classList.remove('no-reduction-color');
     resultsSavedEl.textContent = `Saved ${fmtBytes(totalOriginal - totalCompressed)} (${savedPct}%)`;
     resultsSavedEl.hidden = false;
-    resultsReadyEl.textContent = '● Ready to download';
+    resultsReadyTextEl.textContent = 'Ready to download';
     resultsReadyEl.hidden = false;
     tryLowerQualityBtn.hidden = true;
   } else {
@@ -717,7 +718,7 @@ function showResultsPanel() {
     resultsHeroLabelEl.hidden = true;
     resultsFinalEl.classList.add('no-reduction-color');
     resultsSavedEl.hidden = true;
-    resultsReadyEl.textContent = '● Original ready to download';
+    resultsReadyTextEl.textContent = 'Original ready to download';
     resultsReadyEl.hidden = false;
     tryLowerQualityBtn.hidden = false;
   }
