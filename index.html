@@ -2,519 +2,184 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QuietHike — Software Price Changes, Caught and Verified</title>
-<meta name="description" content="Software companies raise prices quietly. QuietHike catches the change, verifies it against the vendor's own page, and tells you what actually happened — every week.">
-<link rel="canonical" href="https://quiethike.com/">
-<meta property="og:title" content="QuietHike — Software Price Changes, Caught and Verified">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://quiethike.com/">
-<meta property="og:description" content="Software companies raise prices quietly. QuietHike catches the change, verifies it against the vendor's own page, and tells you what actually happened — every week.">
-<meta name="robots" content="index, follow">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta property="og:image" content="https://quiethike.com/og-image.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-3KLNY8ZB2S"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q3MKYL0ENC"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-  gtag("config", "G-3KLNY8ZB2S");
+  gtag('js', new Date());
+  gtag('config', 'G-Q3MKYL0ENC');
 </script>
 <meta name="google-adsense-account" content="ca-pub-8828337552440063">
+<script>
+(function(){
+  try {
+    var saved = localStorage.getItem('quantize-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {}
+})();
+</script>
+<title>Quantize — Compress, resize, and convert images in bulk</title>
+<meta name="description" content="Drop in a batch of images, compress them all, and download one zip. Hit an exact target file size automatically, or convert between JPG, WebP, and PNG. Runs entirely in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://quantizeapp.com/">
+<link rel="canonical" href="https://quantizeapp.com/">
+<meta property="og:title" content="Quantize — Compress, resize, and convert images in bulk">
+<meta property="og:description" content="Drop in a batch of images, compress them all, and download one zip. Hit an exact target file size automatically, or convert between JPG, WebP, and PNG.">
+<meta property="og:image" content="https://quantizeapp.com/quantize-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' fill='%23FAFAF9'/><rect x='6' y='6' width='12' height='12' fill='%23E4572E'/><rect x='22' y='22' width='12' height='12' fill='%231B9C85'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="alternate" type="application/rss+xml" title="QuietHike — Price Change Log" href="https://quiethike.com/rss.xml">
-<link rel="stylesheet" href="quiethike-styles.css">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "QuietHike",
-  "url": "https://quiethike.com/",
-  "logo": "https://quiethike.com/favicon.svg",
-  "email": "hello@quiethike.com",
-  "sameAs": ["https://usestackscope.com"]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "QuietHike",
-  "url": "https://quiethike.com/",
-  "description": "A weekly tracker of quiet, unannounced software pricing and policy changes, verified against each vendor's own current page."
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "QuietHike price-change log",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "url": "https://quiethike.com/#salesforce-agentforce-packaging-2026-08",
-      "item": {
-        "@type": "Article",
-        "headline": "Salesforce keeps Agentforce at $125/user/mo but adds new pricing models",
-        "datePublished": "2026-08-25",
-        "author": { "@type": "Organization", "name": "QuietHike" },
-        "publisher": { "@type": "Organization", "name": "QuietHike" },
-        "description": "Salesforce's $125/user/month Agentforce add-on remains, but new Flex Credits, Conversations pricing, Agentforce 1 Editions, and a per-user license have expanded the packaging around it."
-      }
-    },
-    {
-      "@type": "ListItem",
-      "position": 2,
-      "url": "https://quiethike.com/#atlassian-data-center-sunset",
-      "item": {
-        "@type": "Article",
-        "headline": "Atlassian is sunsetting Data Center outright — and Cloud migration isn't a like-for-like cost swap",
-        "datePublished": "2026-08-25",
-        "author": { "@type": "Organization", "name": "QuietHike" },
-        "publisher": { "@type": "Organization", "name": "QuietHike" },
-        "description": "Atlassian's Data Center sunset milestones run through 2029; independent analysis now backs a ~28% average Cloud cost premium that Atlassian itself does not publish."
-      }
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "url": "https://quiethike.com/#salesforce-einstein-to-agentforce",
-      "item": {
-        "@type": "Article",
-        "headline": "Salesforce replaces Einstein AI packaging with a $125/user/mo Agentforce add-on",
-        "datePublished": "2026-08-21",
-        "author": { "@type": "Organization", "name": "QuietHike" },
-        "publisher": { "@type": "Organization", "name": "QuietHike" },
-        "description": "Salesforce's Einstein add-ons were replaced by Agentforce add-ons at $125/user/month, with usage now tracked through a separate Flex Credits system."
-      }
-    },
-    {
-      "@type": "ListItem",
-      "position": 4,
-      "url": "https://quiethike.com/#quickbooks-online-price-increase-2026",
-      "item": {
-        "@type": "Article",
-        "headline": "QuickBooks raises affected Essentials, Plus, and Advanced subscriptions at renewal — but not Simple Start",
-        "datePublished": "2026-08-21",
-        "author": { "@type": "Organization", "name": "QuietHike" },
-        "publisher": { "@type": "Organization", "name": "QuietHike" },
-        "description": "QuickBooks Online raised Essentials, Plus, and Advanced prices at renewals on or after August 1, 2026; Simple Start, Free, Lite, and Ledger were excluded."
-      }
-    },
-    {
-      "@type": "ListItem",
-      "position": 5,
-      "url": "https://quiethike.com/#figma-per-seat-pricing-overhaul",
-      "item": {
-        "@type": "Article",
-        "headline": "Figma's per-product pricing became per-seat — and monthly billing disappeared from Organization and Enterprise",
-        "datePublished": "2026-08-21",
-        "author": { "@type": "Organization", "name": "QuietHike" },
-        "publisher": { "@type": "Organization", "name": "QuietHike" },
-        "description": "Figma's March 2025 overhaul unified per-product billing into per-seat pricing and removed monthly billing from Organization and Enterprise plans."
-      }
-    },
-    {
-      "@type": "ListItem",
-      "position": 6,
-      "url": "https://quiethike.com/#kit-creator-plan-repricing",
-      "item": {
-        "@type": "Article",
-        "headline": "Kit retired its old $15 entry tier — and Creator now starts at $33/mo billed annually",
-        "datePublished": "2026-08-21",
-        "author": { "@type": "Organization", "name": "QuietHike" },
-        "publisher": { "@type": "Organization", "name": "QuietHike" },
-        "description": "Kit's legacy $15/mo Creator tier was retired outright in its September 2025 repricing; Creator now starts at $33/mo billed annually at 1,000 subscribers."
-      }
-    }
-  ]
-}
-</script>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="quantize-styles.css">
 </head>
 <body>
 
-<header class="site-header">
-  <div class="wrap">
-    <a href="index.html" class="logo"><span class="mark">▲▼</span> QuietHike</a>
-    <nav class="main-nav">
-      <a href="#log">This week</a>
-      <a href="#methodology">How we verify</a>
-      <a href="#about">About</a>
-    </nav>
-  </div>
+<header class="nav">
+  <a href="index.html" class="wordmark">Quantize</a>
+  <nav class="nav-links">
+    <a href="quantize-about.html">About</a>
+    <a href="quantize-faq.html">FAQ</a>
+    <a href="quantize-contact.html">Contact</a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">Dark</button>
+  </nav>
 </header>
 
 <main>
   <section class="hero">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <p class="eyebrow">Weekly price-change tracker</p>
-        <h1>Software raises prices quietly.<br>We watch, and we write it down.</h1>
-        <p class="hero-sub">Every week, we catch a real pricing change a vendor didn't put in a headline — a shrunk free tier, a renamed plan that costs more, a promo that quietly became the standard rate — verify it against the vendor's own page, and log it here.</p>
-        <div class="hero-ctas">
-          <a href="#log" class="btn btn-primary">See this week's verified changes</a>
-          <a href="#methodology" class="btn btn-ghost">See how verification works</a>
+    <p class="eyebrow">Batch image compressor</p>
+    <h1>Shrink a whole folder of photos in one go.</h1>
+    <p class="lead">Drop in as many images as you want, compress or convert them all, and download one zip. Set an exact target file size instead of guessing at a quality slider. Nothing you upload ever leaves your browser.</p>
+  </section>
+
+  <section class="tool">
+    <div class="drop-zone" id="dropZone">
+      <p class="big">Drop images here, or click to choose files</p>
+      <p>JPG, PNG, WebP, HEIC-in-browser support varies by device — any image your browser can open</p>
+      <input type="file" id="fileInput" accept="image/*" multiple hidden>
+    </div>
+
+    <div class="preview-bar" id="previewBar">
+      <div class="preview-thumbs" id="previewThumbs"></div>
+      <p class="preview-count" id="previewCount"></p>
+      <div class="preview-actions">
+        <button class="secondary" id="addMoreBtn">Add more</button>
+        <button class="secondary" id="clearAllBtn">Clear all</button>
+      </div>
+    </div>
+
+    <div class="controls-card">
+      <div class="settings-section">
+        <p class="section-label">Output</p>
+        <div class="control-row">
+          <div class="control-group">
+            <label for="formatSelect">Output format</label>
+            <select id="formatSelect">
+              <option value="jpeg" selected>JPG</option>
+              <option value="webp">WebP</option>
+              <option value="png">PNG (lossless)</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="maxWidthInput">Max width (px, optional)</label>
+            <input type="number" id="maxWidthInput" placeholder="No limit" min="1">
+          </div>
+        </div>
+        <p class="png-note" id="pngNote" hidden>PNG is lossless — quality and target-size settings don't apply to it.</p>
+      </div>
+
+      <div class="settings-section">
+        <p class="section-label">Compression</p>
+        <div class="control-row">
+          <div class="control-group">
+            <label>Mode</label>
+            <div class="mode-radios">
+              <label><input type="radio" name="mode" value="quality" checked> Quality slider</label>
+              <label><input type="radio" name="mode" value="target"> Target file size</label>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="diff-card" aria-label="Recent price change example">
-        <div class="diff-head">
-          <span>quiethike/log</span>
-          <span class="diff-date">Aug 2026</span>
+      <div class="settings-section">
+        <p class="section-label" id="qualitySectionLabel">Quality</p>
+        <div class="control-row" id="qualityGroup">
+          <div class="control-group">
+            <label for="qualitySlider">Quality</label>
+            <input type="range" id="qualitySlider" min="1" max="100" value="80">
+            <span id="qualityValueLabel">80%</span>
+          </div>
         </div>
-        <div class="diff-line diff-context">$ quickbooks --plan Plus --tier annual</div>
-        <div class="diff-line diff-removed">- ~$99–115/mo <span class="diff-label">(before Aug 1, 2026) <span class="src-tag">[3P — disputed]</span></span></div>
-        <div class="diff-line diff-added">+ $140/mo <span class="diff-label">(current) <span class="src-tag">[VENDOR]</span></span></div>
-        <div class="diff-line diff-context">$ figma --plan Professional --seat Full</div>
-        <div class="diff-line diff-removed">- Per-product billing (Design/Dev Mode/FigJam separate) <span class="diff-label">(pre–March 2025) <span class="src-tag">[VENDOR]</span></span></div>
-        <div class="diff-line diff-added">+ $16/seat/mo <span class="diff-label">(current, unified Full seat) <span class="src-tag">[VENDOR]</span></span></div>
-        <div class="diff-line diff-context">$ kit --plan Creator --subs 1000</div>
-        <div class="diff-line diff-removed">- $15/mo <span class="diff-label">(before Sept 2025, ~300 subs) <span class="src-tag">[3P]</span></span></div>
-        <div class="diff-line diff-added">+ $33/mo billed annually <span class="diff-label">(current) <span class="src-tag">[VENDOR]</span></span></div>
-      </div>
-    </div>
-  </section>
 
-  <section class="section stats-strip" aria-label="This week's verification stats — click a stat to filter the log">
-    <div class="wrap">
-      <div class="stats-grid">
-        <button type="button" class="stat-tile" data-stat-filter="increase">
-          <span class="stat-num n-increase">2</span>
-          <span class="stat-label">Price increases</span>
-        </button>
-        <button type="button" class="stat-tile" data-stat-filter="decrease">
-          <span class="stat-num n-decrease">0</span>
-          <span class="stat-label">Price decreases</span>
-        </button>
-        <button type="button" class="stat-tile" data-stat-filter="structural">
-          <span class="stat-num n-structural">4</span>
-          <span class="stat-label">Structural changes</span>
-        </button>
-        <button type="button" class="stat-tile" data-stat-filter="disputed">
-          <span class="stat-num n-disputed">3</span>
-          <span class="stat-label">Disputed figures</span>
-        </button>
-        <button type="button" class="stat-tile" data-stat-filter="all">
-          <span class="stat-num n-total">6</span>
-          <span class="stat-label">Total verified changes</span>
-        </button>
-      </div>
-    </div>
-  </section>
+        <div class="control-row" id="targetGroup" hidden>
+          <div class="control-group">
+            <label for="targetSizeInput">Target size</label>
+            <div class="target-inputs">
+              <input type="number" id="targetSizeInput" placeholder="500" min="1">
+              <select id="targetUnitSelect">
+                <option value="KB" selected>KB</option>
+                <option value="MB">MB</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
-  <section class="section" id="log">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow live-badge"><span class="live-dot" aria-hidden="true"></span> Live log — week of Aug 24–30, 2026</p>
-        <h2>This week's changes</h2>
-        <p>Every entry is verified against the vendor's current pricing page; historical "before" prices are separately sourced and labeled, since a vendor's own page rarely shows what something used to cost.</p>
-      </div>
-
-      <div class="search-bar">
-        <input type="search" id="log-search" class="search-input" placeholder="Search companies, plans, or pricing changes…" aria-label="Search the log">
-      </div>
-
-      <div class="filter-bar" role="group" aria-label="Filter log entries by type">
-        <button type="button" class="filter-btn is-active" data-filter="all">All</button>
-        <button type="button" class="filter-btn" data-filter="increase">Price Increase</button>
-        <button type="button" class="filter-btn" data-filter="decrease">Price Decrease</button>
-        <button type="button" class="filter-btn" data-filter="structural">Structural Change</button>
-        <button type="button" class="filter-btn" data-filter="verified">Verified</button>
-        <button type="button" class="filter-btn" data-filter="disputed">Disputed</button>
-      </div>
-      <p class="filter-empty" id="filter-empty" hidden>No entries match this filter yet — check back as new changes get logged.</p>
-
-
-      <div class="log-list">
-
-        <article class="log-entry" id="salesforce-agentforce-packaging-2026-08" data-filter="structural verified">
-          <div class="log-meta">
-            <span class="log-date">August 25, 2026</span>
-            <span class="log-tag tag-up">Structural change</span>
-            <span class="log-tag tag-verified">Verified</span>
+        <div class="estimate-box" id="estimateBox" hidden>
+          <div class="estimate-item">
+            <span class="estimate-label">Estimated output</span>
+            <span class="estimate-value" id="estimateValue">—</span>
           </div>
-          <h3>Salesforce keeps Agentforce at $125/user/mo but adds new pricing models</h3>
-          <div class="diff-line diff-removed">- Agentforce add-on: $125/user/month billed annually <span class="src-tag">[VENDOR]</span> (single option)</div>
-          <div class="diff-line diff-added">+ $125/user/mo add-on remains <span class="src-tag">[VENDOR]</span> — plus new Flex Credits ($500/100,000 credits), Conversations ($2 each), Agentforce 1 Editions (from $550/user/mo), and a $5/user/mo Agentforce User License <span class="src-tag">[VENDOR]</span></div>
-          <button type="button" class="evidence-toggle" aria-expanded="false">View evidence →</button>
-          <div class="evidence-detail" hidden>
-            <p class="log-body">The $125/user/month Agentforce add-on hasn't been replaced — it's still listed for Sales and Service. What's changed is the packaging around it: Salesforce now also sells consumption-based Flex Credits, per-conversation pricing, a much pricier all-in Agentforce 1 Edition tier, and a low-cost per-user license that still requires buying Flex Credits separately. For buyers, $125 is now one option inside a wider menu rather than the only current path to Agentforce.</p>
-            <p class="log-source">Sources: <a href="https://www.salesforce.com/agentforce/pricing/" target="_blank" rel="noopener" style="color: var(--accent);">Salesforce — Agentforce pricing page</a> [VENDOR] · <a href="https://www.salesforce.com/sales/pricing/add-ons/" target="_blank" rel="noopener" style="color: var(--accent);">Salesforce — Sales add-on pricing</a> [VENDOR]</p>
+          <div class="estimate-item">
+            <span class="estimate-label">Reduction</span>
+            <span class="estimate-value accent" id="estimateReduction">—</span>
           </div>
-        </article>
-
-        <article class="log-entry" id="atlassian-data-center-sunset" data-filter="structural disputed">
-          <div class="log-meta">
-            <span class="log-date">Announced Sep 2025, sunset phased 2026–2029</span>
-            <span class="log-tag tag-up">Structural change</span>
-            <span class="log-tag tag-partial">Current price verified · historical price third-party</span>
-          </div>
-          <h3>Atlassian is sunsetting Data Center outright — and Cloud migration isn't a like-for-like cost swap</h3>
-          <div class="diff-line diff-removed">- Data Center: perpetual on-prem licensing, no defined end date <span class="src-tag">[VENDOR]</span></div>
-          <div class="diff-line diff-added">+ Phased shutdown: new-customer sales ended Mar 30, 2026 → existing-customer expansions end Mar 30, 2028 → licenses go read-only Mar 28, 2029 <span class="src-tag">[VENDOR]</span></div>
-          <button type="button" class="evidence-toggle" aria-expanded="false">View evidence →</button>
-          <div class="evidence-detail" hidden>
-            <p class="log-body">Atlassian is retiring Data Center entirely on a three-year phased timeline rather than just raising its price. Bitbucket Data Center is the one exception — it keeps a separate hybrid license instead of following the sunset schedule. Atlassian is offering a 10–20% first-year discount on Cloud Enterprise for customers who migrate by June 2027, but that incentive doesn't fully offset the underlying cost shift: independent analysis puts the average Cloud premium over equivalent Data Center pricing at around <button type="button" class="disputed-badge" data-disputed-note="Atlassian does not publish or confirm this figure on its own pricing pages. The ~28% average Cloud cost premium comes from independent third-party analysis (Computerworld and The Jira Guy), not from Atlassian directly — treat it as a credible estimate, not a vendor-confirmed number.">28% — disputed ⓘ</button>, a figure Atlassian itself has not published or confirmed on its own pricing pages.</p>
-            <p class="log-source">Sources: <a href="https://www.atlassian.com/licensing/data-center-end-of-life" target="_blank" rel="noopener" style="color: var(--accent);">Atlassian — Data Center End of Life</a> [VENDOR] · <a href="https://www.computerworld.com/article/4054807/atlassian-says-its-dont-f-the-customer-principle-drove-cloud-only-decision.html" target="_blank" rel="noopener" style="color: var(--accent);">Computerworld</a> [3P] · <a href="https://thejiraguy.com/2025/09/08/so-long-data-center/" target="_blank" rel="noopener" style="color: var(--accent);">The Jira Guy</a> [3P — 28% figure]</p>
-          </div>
-        </article>
-
-        <article class="log-entry" id="salesforce-einstein-to-agentforce" data-filter="structural verified">
-          <div class="log-meta">
-            <span class="log-date">Announced August 2025, migration ongoing through 2026</span>
-            <span class="log-tag tag-up">Structural change</span>
-            <span class="log-tag tag-verified">Verified</span>
-          </div>
-          <h3>Salesforce replaces Einstein AI packaging with a $125/user/mo Agentforce add-on</h3>
-          <div class="diff-line diff-removed">- Einstein add-ons / Einstein 1 Editions (retired)</div>
-          <div class="diff-line diff-added">+ Agentforce add-ons, $125/user/mo billed annually <span class="src-tag">[VENDOR]</span> — $1,500/user/year <span class="src-tag">[DERIVED — VENDOR]</span></div>
-          <button type="button" class="evidence-toggle" aria-expanded="false">View evidence →</button>
-          <div class="evidence-detail" hidden>
-            <p class="log-body">This is an add-on price on top of the underlying Salesforce edition, not a replacement for Salesforce's core CRM subscription. Salesforce announced the Einstein-to-Agentforce replacement publicly in August 2025 — so it's not a hidden pricing-page swap — but the migration mechanics are where it gets less obvious. Agentforce (Default) reached End of Sale on June 17, 2025, and Salesforce's own Help docs lay out what happens when an existing Einstein customer upgrades their SKU to Agentforce. Separately, as of October 24, 2025, Agentforce usage outside unmetered employee-agent activity is tracked through a new "Flex Credits" system — so the $125/month sticker price doesn't mean unlimited AI usage. We could not verify a universal rule that every legacy Einstein customer is automatically moved to the new pricing at renewal; treat that specific claim as unconfirmed.</p>
-            <p class="log-source">Sources: <a href="https://www.salesforce.com/news/stories/pricing-update-2025/" target="_blank" rel="noopener" style="color: var(--accent);">Salesforce News — Pricing Update announcement</a> [VENDOR] · <a href="https://www.salesforce.com/agentforce/pricing/" target="_blank" rel="noopener" style="color: var(--accent);">Agentforce pricing page</a> [VENDOR] · <a href="https://help.salesforce.com/s/articleView?id=005197697&language=en_US&type=1" target="_blank" rel="noopener" style="color: var(--accent);">Salesforce Help — Flex Credit Rate Card FAQ</a> [VENDOR]</p>
-          </div>
-        </article>
-
-        <article class="log-entry" id="quickbooks-online-price-increase-2026" data-filter="increase disputed">
-          <div class="log-meta">
-            <span class="log-date">Aug 1, 2026</span>
-            <span class="log-tag tag-up">Price increase</span>
-            <span class="log-tag tag-partial">Current price verified · historical price third-party</span>
-          </div>
-          <h3>QuickBooks raises affected Essentials, Plus, and Advanced subscriptions at renewal — but not Simple Start</h3>
-          <p class="log-body" style="font-size: 0.86rem; color: var(--diff-red); margin-bottom: 14px;"><b>Correction:</b> an earlier version of this entry incorrectly stated that QuickBooks Simple Start's price rose to $38/mo on August 1, 2026. QuickBooks' own official pricing update confirms Simple Start, Free, Lite, and Ledger were explicitly excluded from this increase — only Essentials, Plus, and Advanced changed. This entry has been corrected to reflect that.</p>
-          <div class="diff-line diff-removed">- ~$99–115/mo <button type="button" class="disputed-badge" data-disputed-note="Third-party sources disagree on QuickBooks Plus's exact prior price — reports cite figures ranging roughly $99 to $115/mo, and no vendor archive confirms a single number. The current $140/mo figure is vendor-confirmed; only the historical 'before' price is disputed.">3P — disputed ⓘ</button> (Plus, before Aug 1, 2026 — sources disagree on the exact prior figure)</div>
-          <div class="diff-line diff-added">+ $140/mo <span class="src-tag">[VENDOR]</span> (Plus, current)</div>
-          <button type="button" class="evidence-toggle" aria-expanded="false">View evidence →</button>
-          <div class="evidence-detail" hidden>
-            <p class="log-body">QuickBooks Online raised prices for Essentials, Plus, and Advanced at renewals on or after August 1, 2026 — Simple Start, Free, Lite, and Ledger were not part of this increase, per QuickBooks' own announcement. Essentials rose to $85/mo (third-party sources disagree on the prior figure, citing either $60 or $75). Advanced rose to $340/mo (prior figure similarly disputed between $200 and $275 across sources). Prepaid annual subscribers generally keep their existing rate until the current term ends, and some recent subscribers get a six-month price-protection window. We could not source an exact count of how many total increases QuickBooks has made since 2022; treat "a series of past increases" as accurate without a specific number attached.</p>
-            <p class="log-source">Sources: <a href="https://quickbooks.intuit.com/r/product-update/quickbooks-price-changes/" target="_blank" rel="noopener" style="color: var(--accent);">QuickBooks — official pricing update announcement</a> [VENDOR] · <a href="https://www.certumsolutions.com/library/quickbooks-price-increase-august-2026" target="_blank" rel="noopener" style="color: var(--accent);">Certum Solutions</a> [3P] · <a href="https://www.mosofin.com/blog/quickbooks-price-increase-2026" target="_blank" rel="noopener" style="color: var(--accent);">MosoFin</a> [3P — disagrees with Certum on prior Plus/Advanced figures]</p>
-          </div>
-        </article>
-
-        <article class="log-entry" id="figma-per-seat-pricing-overhaul" data-filter="structural verified">
-          <div class="log-meta">
-            <span class="log-date">Mar 11, 2025</span>
-            <span class="log-tag tag-up">Structural change</span>
-            <span class="log-tag tag-verified">Verified</span>
-          </div>
-          <h3>Figma's per-product pricing became per-seat — and monthly billing disappeared from Organization and Enterprise</h3>
-          <div class="diff-line diff-removed">- Figma Design, Dev Mode, FigJam billed separately <span class="src-tag">[VENDOR]</span></div>
-          <div class="diff-line diff-added">+ Unified seat types (Full/Dev/Collab), $16–$90/seat/mo <span class="src-tag">[VENDOR]</span></div>
-          <button type="button" class="evidence-toggle" aria-expanded="false">View evidence →</button>
-          <div class="evidence-detail" hidden>
-            <p class="log-body">The bigger story isn't the sticker price — it's that Organization and Enterprise no longer offer monthly billing at all going forward, only annual. Teams with fluctuating headcount lost a flexibility option that existed before the overhaul, and it's easy to miss unless you're pricing out a renewal.</p>
-            <p class="log-source">Sources: <a href="https://www.figma.com/professional/" target="_blank" rel="noopener" style="color: var(--accent);">Figma — Professional plan pricing</a> [VENDOR] · <a href="https://help.figma.com/hc/en-us/articles/13839214115607-Professional-plan-overview" target="_blank" rel="noopener" style="color: var(--accent);">Figma Help — Professional plan overview</a> [VENDOR] · <a href="https://forum.figma.com/t/i-m-curious-about-the-differences-in-billing-methods-for-the-plans/94132" target="_blank" rel="noopener" style="color: var(--accent);">Figma community forum</a> [3P]</p>
-          </div>
-        </article>
-
-        <article class="log-entry" id="kit-creator-plan-repricing" data-filter="increase disputed">
-          <div class="log-meta">
-            <span class="log-date">Sep 2025</span>
-            <span class="log-tag tag-up">Price increase</span>
-            <span class="log-tag tag-partial">Current price verified · historical price third-party</span>
-          </div>
-          <h3>Kit retired its old $15 entry tier — and Creator now starts at $33/mo billed annually</h3>
-          <div class="diff-line diff-removed">- $15/mo <span class="src-tag">[3P]</span> (Creator, ~300 subscribers, legacy pricing)</div>
-          <div class="diff-line diff-added">+ $33/mo annual, $39/mo monthly <span class="src-tag">[VENDOR]</span> (Creator, 1,000 subscribers)</div>
-          <button type="button" class="evidence-toggle" aria-expanded="false">View evidence →</button>
-          <div class="evidence-detail" hidden>
-            <p class="log-body">This wasn't a gradual increase — the old low-tier pricing structure was retired outright in the September 2025 repricing. Anyone quoting Kit's "starts at $15" is quoting a price that no longer exists for new signups.</p>
-            <p class="log-source">Sources: <a href="https://help.kit.com/en/articles/4494683-creator-plan-vs-creator-pro" target="_blank" rel="noopener" style="color: var(--accent);">Kit's own help center</a> [VENDOR] · <a href="https://ecommerce-platforms.com/articles/convertkit-pricing" target="_blank" rel="noopener" style="color: var(--accent);">Ecommerce-Platforms.com, published April 2024 — contemporaneous record of the $15/mo price while it was still current</a> [3P] · <a href="https://buyersprint.com/2026/04/05/convertkit-pricing-2026/" target="_blank" rel="noopener" style="color: var(--accent);">BuyerSprint</a> [3P]</p>
-          </div>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="methodology">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">Methodology</p>
-        <h2>How we verify a change before logging it</h2>
-      </div>
-      <ol class="method-list">
-        <li>
-          <div>
-            <h4>Catch it</h4>
-            <p>A price change surfaces from a vendor's own changelog, a community forum thread, a support article update, or a discrepancy noticed while researching elsewhere.</p>
-          </div>
-        </li>
-        <li>
-          <div>
-            <h4>Verify against the vendor directly</h4>
-            <p>Before anything gets logged, we check the vendor's own current pricing page — never a third-party blog alone. If the vendor's own pages disagree with each other, we say so rather than picking one.</p>
-          </div>
-        </li>
-        <li>
-          <div>
-            <h4>Cross-check the "before" price</h4>
-            <p>The old price gets the same scrutiny as the new one — sourced from an archived page, a prior independent pricing tracker, or the vendor's own changelog, never guessed.</p>
-          </div>
-        </li>
-        <li>
-          <div>
-            <h4>Log it plainly</h4>
-            <p>What changed, what it actually means for a real buyer, and where to verify it yourself. No affiliate framing, no "which plan should you pick" — just what happened.</p>
-          </div>
-        </li>
-      </ol>
-
-      <div class="method-example">
-        <p class="method-example-label">Real example from this week's log</p>
-        <div class="diff-card" aria-label="QuickBooks Plus verification example">
-          <div class="diff-head">
-            <span>quiethike/verify</span>
-            <span class="diff-date">QuickBooks Online</span>
-          </div>
-          <div class="diff-line diff-context">01 → 02: found on QuickBooks' own pricing update page, not a reseller blog</div>
-          <div class="diff-line diff-removed">- ~$99–115/mo <span class="diff-label">(Plus, before Aug 1, 2026) <span class="src-tag">[3P — disputed]</span></span></div>
-          <div class="diff-line diff-added">+ $140/mo <span class="diff-label">(Plus, current, confirmed Aug 1, 2026) <span class="src-tag">[VENDOR]</span></span></div>
-          <div class="diff-line diff-context">03 → 04: renewal-date language checked against a live 90%-off promo, kept separate from the standard rate</div>
-          <div class="diff-line diff-context">05: published with the historical figure labeled disputed, not silently resolved</div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section class="section" id="about" style="padding-top: 0;">
-    <div class="wrap">
-      <div class="section-head" style="max-width: 68ch;">
-        <p class="eyebrow">About</p>
-        <h2>Why this exists</h2>
-        <p>Most "software raises prices" coverage happens after the fact, if it happens at all — a Reddit thread, a scattered blog post, easy to miss. QuietHike exists to catch the change while it's current, verify it properly, and give it a permanent, plain-English record. A companion to <a href="https://usestackscope.com" style="color: var(--accent);">StackScope</a>, which does the same verification work for full category comparisons rather than single price changes.</p>
-        <p style="margin-top: 16px;">Spotted a price change we haven't caught, or found an error in something we logged? <a href="mailto:hello@quiethike.com" style="color: var(--accent);">hello@quiethike.com</a></p>
+      <div class="action-row">
+        <button class="primary cta-big" id="processAllBtn" disabled>Compress images →</button>
+      </div>
+      <p id="summary">Drop images in to get started.</p>
+
+      <div class="progress-wrap" id="progressWrap" hidden>
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <p class="progress-status" id="progressStatusText" aria-live="polite">0 / 0 images</p>
+      </div>
+
+      <div class="results-panel" id="resultsPanel" aria-live="polite">
+        <div class="results-stats">
+          <div class="stat"><span class="stat-label">Images</span><span class="stat-value" id="resultsCount">0</span></div>
+          <div class="stat"><span class="stat-label">Original</span><span class="stat-value" id="resultsOriginal">0 B</span></div>
+          <div class="stat"><span class="stat-label">Final</span><span class="stat-value" id="resultsFinal">0 B</span></div>
+          <div class="stat"><span class="stat-label">Saved</span><span class="stat-value accent" id="resultsPct">0%</span></div>
+        </div>
+        <button class="primary cta-big results-download-btn" id="downloadZipBtn" disabled>Download ZIP →</button>
       </div>
     </div>
+
+    <div class="file-list" id="fileList"></div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap foot-grid">
-    <p class="foot-disclosure">QuietHike logs publicly verifiable pricing changes. We are not affiliated with, and do not receive payment from, any vendor mentioned. Confirm current pricing directly with each vendor before purchasing.</p>
-    <nav class="foot-links">
-      <a href="#log">This week</a>
-      <a href="#methodology">Methodology</a>
-      <a href="#about">About</a>
-      <a href="terms.html">Terms</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="rss.xml">RSS</a>
+<p class="network-links">More free tools from us: <a href="https://usequietzone.com">Quiet Zone</a> — a QR code scanner and generator</p>
+  <div class="foot-inner">
+    <nav>
+      <a href="quantize-about.html">About</a>
+      <a href="quantize-faq.html">FAQ</a>
+      <a href="quantize-contact.html">Contact</a>
+      <a href="quantize-terms.html">Terms</a>
+      <a href="quantize-privacy.html">Privacy</a>
     </nav>
+    <p>© 2026 Quantize — everything above runs in your browser.</p>
   </div>
 </footer>
 
-<script>
-(function () {
-  // --- filter bar + clickable stats + search (composable: both conditions must match) ---
-  var filterBtns = document.querySelectorAll('.filter-btn');
-  var statTiles = document.querySelectorAll('.stat-tile');
-  var entries = document.querySelectorAll('.log-entry[data-filter]');
-  var emptyMsg = document.getElementById('filter-empty');
-  var searchInput = document.getElementById('log-search');
-
-  var currentFilter = 'all';
-  var currentQuery = '';
-  var searchIndex = null; // populated from data/log-entries.json, keyed by entry id
-
-  function entryMatchesQuery(entry, query) {
-    if (!query) return true;
-    if (!searchIndex) {
-      // fallback: search the entry's own rendered text if the archive hasn't loaded yet
-      return entry.textContent.toLowerCase().indexOf(query) !== -1;
-    }
-    var record = searchIndex[entry.id];
-    if (!record) return entry.textContent.toLowerCase().indexOf(query) !== -1;
-    var haystack = (record.company + ' ' + record.headline + ' ' + record.body).toLowerCase();
-    return haystack.indexOf(query) !== -1;
-  }
-
-  function render() {
-    var visibleCount = 0;
-    entries.forEach(function (entry) {
-      var tags = (entry.getAttribute('data-filter') || '').split(' ');
-      var matchesFilter = currentFilter === 'all' || tags.indexOf(currentFilter) !== -1;
-      var matchesQuery = entryMatchesQuery(entry, currentQuery);
-      var match = matchesFilter && matchesQuery;
-      entry.hidden = !match;
-      if (match) visibleCount++;
-    });
-    emptyMsg.hidden = visibleCount !== 0;
-  }
-
-  function applyFilter(filter, scroll) {
-    currentFilter = filter;
-    filterBtns.forEach(function (b) {
-      b.classList.toggle('is-active', b.getAttribute('data-filter') === filter);
-    });
-    render();
-    if (scroll) {
-      document.getElementById('log').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
-  filterBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      applyFilter(btn.getAttribute('data-filter'), true);
-    });
-  });
-
-  statTiles.forEach(function (tile) {
-    tile.addEventListener('click', function () {
-      applyFilter(tile.getAttribute('data-stat-filter'), true);
-    });
-  });
-
-  if (searchInput) {
-    searchInput.addEventListener('input', function () {
-      currentQuery = searchInput.value.trim().toLowerCase();
-      render();
-    });
-  }
-
-  // load the structured archive once, for full-text search matching
-  fetch('data/log-entries.json')
-    .then(function (res) { return res.json(); })
-    .then(function (data) {
-      searchIndex = {};
-      data.forEach(function (record) { searchIndex[record.id] = record; });
-    })
-    .catch(function () {
-      // search still works via on-page text fallback if the archive fails to load
-    });
-
-  // --- expandable evidence cards ---
-  document.querySelectorAll('.evidence-toggle').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var detail = btn.nextElementSibling;
-      var expanded = btn.getAttribute('aria-expanded') === 'true';
-      detail.hidden = expanded;
-      btn.setAttribute('aria-expanded', String(!expanded));
-      btn.textContent = expanded ? 'View evidence →' : 'Hide evidence ▲';
-    });
-  });
-
-  // --- disputed badges ---
-  document.querySelectorAll('.disputed-badge').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var existing = btn.parentElement.querySelector('.disputed-note');
-      if (existing) {
-        existing.remove();
-        return;
-      }
-      var note = document.createElement('span');
-      note.className = 'disputed-note';
-      note.textContent = btn.getAttribute('data-disputed-note');
-      btn.insertAdjacentElement('afterend', note);
-    });
-  });
-})();
-</script>
-
+<script src="quantize-app.js"></script>
+<script src="quantize-theme.js"></script>
 </body>
 </html>
