@@ -66,6 +66,7 @@
       <p>JPG, PNG, WebP, HEIC-in-browser support varies by device — any image your browser can open</p>
       <input type="file" id="fileInput" accept="image/*" multiple hidden>
     </div>
+    <p class="privacy-badge">🔒 Runs entirely in your browser — your images are never uploaded anywhere</p>
     <p class="upload-error" id="uploadError" hidden></p>
 
     <div class="preview-bar" id="previewBar">
@@ -81,6 +82,13 @@
     <div class="controls-card">
       <div class="settings-section">
         <p class="section-label">Output</p>
+        <div class="preset-row">
+          <span class="preset-label">Presets:</span>
+          <button type="button" class="preset-btn" data-preset="web">Web</button>
+          <button type="button" class="preset-btn" data-preset="social">Social</button>
+          <button type="button" class="preset-btn" data-preset="email">Email</button>
+          <button type="button" class="preset-btn" data-preset="max">Max savings</button>
+        </div>
         <div class="control-row">
           <div class="control-group">
             <label for="formatSelect">Output format</label>
@@ -93,8 +101,13 @@
           <div class="control-group">
             <label for="maxWidthInput">Max width (px, optional)</label>
             <input type="number" id="maxWidthInput" placeholder="No limit" min="1">
+            <span class="field-hint">Leave blank to keep original dimensions</span>
           </div>
         </div>
+        <label class="checkbox-row">
+          <input type="checkbox" id="keepOriginalNameCheckbox">
+          Keep original filename (no "-quantized" suffix)
+        </label>
         <p class="png-note" id="pngNote" hidden>PNG is lossless — quality and target-size settings don't apply to it.</p>
       </div>
 
@@ -116,8 +129,13 @@
         <div class="control-row" id="qualityGroup">
           <div class="control-group">
             <label for="qualitySlider">Quality</label>
-            <input type="range" id="qualitySlider" min="1" max="100" value="80">
+            <div class="slider-row">
+              <span class="slider-endlabel">Smaller file</span>
+              <input type="range" id="qualitySlider" min="1" max="100" value="80">
+              <span class="slider-endlabel">Higher quality</span>
+            </div>
             <span id="qualityValueLabel">80%</span>
+            <span class="field-hint">Lower quality means a smaller file but more visible compression artifacts</span>
           </div>
         </div>
 
@@ -131,6 +149,7 @@
                 <option value="MB">MB</option>
               </select>
             </div>
+            <span class="field-hint">An attempted maximum, not a guarantee — already-compressed images may land slightly higher</span>
           </div>
         </div>
       </div>
@@ -145,7 +164,7 @@
             </span>
             <span class="arrow">→</span>
             <span class="estimate-col">
-              <span class="estimate-tag">Estimated</span>
+              <span class="estimate-tag">Output</span>
               <span class="estimate-value" id="estimateValue">—</span>
             </span>
           </div>
@@ -170,10 +189,13 @@
           <span class="results-hero-label" id="resultsHeroLabel">smaller</span>
         </div>
         <p class="results-sizes">
+          <span class="results-tag">Original</span>
           <span id="resultsOriginal">0 B</span>
           <span class="arrow">→</span>
+          <span class="results-tag">Output</span>
           <span class="accent" id="resultsFinal">0 B</span>
         </p>
+        <p class="results-saved" id="resultsSaved" hidden></p>
         <p class="results-note" id="resultsNote" hidden></p>
         <p class="results-meta" id="resultsMeta" hidden></p>
         <p class="results-count" id="resultsCountLine" hidden></p>
@@ -191,6 +213,8 @@
 
         <button class="secondary" id="tryLowerQualityBtn" hidden>Try lower quality</button>
         <button class="primary cta-big results-download-btn" id="downloadZipBtn" disabled>Download image →</button>
+        <button class="text-link" id="downloadAnywayBtn" hidden>Download compressed version anyway</button>
+        <p class="results-settings-recap" id="resultsSettingsRecap"></p>
         <div class="results-secondary">
           <button class="secondary" id="compressAgainBtn">Compress again</button>
           <button class="secondary" id="addMoreResultsBtn">Add more images</button>
@@ -199,8 +223,14 @@
     </div>
 
     <div class="file-list" id="fileList"></div>
+    <button class="secondary" id="fileListToggleBtn" hidden></button>
   </section>
 </main>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close preview">×</button>
+  <img id="lightboxImg" alt="Full-size preview">
+</div>
 
 <footer>
 <p class="network-links">More free tools from us: <a href="https://usequietzone.com">Quiet Zone</a> — a QR code scanner and generator</p>

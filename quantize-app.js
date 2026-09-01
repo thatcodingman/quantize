@@ -159,6 +159,22 @@ const resultsAfterImg = document.getElementById('resultsAfterImg');
 const resultsHeroLabelEl = document.getElementById('resultsHeroLabel');
 const resultsNoteEl = document.getElementById('resultsNote');
 const tryLowerQualityBtn = document.getElementById('tryLowerQualityBtn');
+const resultsSavedEl = document.getElementById('resultsSaved');
+const downloadAnywayBtn = document.getElementById('downloadAnywayBtn');
+const resultsSettingsRecapEl = document.getElementById('resultsSettingsRecap');
+const keepOriginalNameCheckbox = document.getElementById('keepOriginalNameCheckbox');
+const fileListToggleBtn = document.getElementById('fileListToggleBtn');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxClose = document.getElementById('lightboxClose');
+const presetButtons = document.querySelectorAll('.preset-btn');
+
+const PRESETS = {
+  web:    { format: 'jpeg', mode: 'quality', quality: 75, maxWidth: 1920 },
+  social: { format: 'jpeg', mode: 'quality', quality: 80, maxWidth: 1080 },
+  email:  { format: 'jpeg', mode: 'quality', quality: 60, maxWidth: 1024 },
+  max:    { format: 'jpeg', mode: 'quality', quality: 35, maxWidth: 1280 }
+};
 const compressAgainBtn = document.getElementById('compressAgainBtn');
 const addMoreResultsBtn = document.getElementById('addMoreResultsBtn');
 const dropZoneHeadline = document.getElementById('dropZoneHeadline');
@@ -230,12 +246,26 @@ function addFiles(fileList) {
   updateDropZoneVisibility();
   updatePreviewBar();
   flashUploadConfirm();
+  updateFileListToggle();
 
   if (skipped > 0) {
     uploadErrorEl.textContent = `${skipped} file${skipped > 1 ? 's were' : ' was'} skipped — not a supported image type.`;
     uploadErrorEl.hidden = false;
   } else {
     uploadErrorEl.hidden = true;
+  }
+}
+
+function updateFileListToggle() {
+  const total = state.entries.length;
+  if (total > 8) {
+    fileListToggleBtn.hidden = false;
+    fileListToggleBtn.textContent = fileListEl.classList.contains('expanded')
+      ? 'Show fewer'
+      : `Show all ${total} files`;
+  } else {
+    fileListToggleBtn.hidden = true;
+    fileListEl.classList.remove('expanded');
   }
 }
 
@@ -255,6 +285,7 @@ function removeEntry(id) {
   updateProcessButtonState();
   updateDropZoneVisibility();
   updatePreviewBar();
+  updateFileListToggle();
   scheduleEstimate();
   if (state.entries.length === 0) {
     resultsPanel.classList.remove('visible');
@@ -328,11 +359,12 @@ function renderFileRow(entry) {
         <span class="size-after">${compressedText}</span>
         ${savedPctTag}
         <span class="file-status status-${entry.status}">${statusText}</span>
+        ${entry.targetMissed ? '<span class="file-status status-target-missed">Target not reached</span>' : ''}
       </p>
     </div>
     <div class="file-actions">
       ${hasResult ? `<button class="row-compare" data-id="${entry.id}" aria-expanded="false">Compare</button>` : ''}
-      <button class="row-download" data-id="${entry.id}" ${hasResult ? '' : 'disabled'}>Download</button>
+      <button class="row-download" data-id="${entry.id}" ${hasResult ? '' : 'disabled'}>${hasResult && entry.compressedSize >= entry.originalSize ? 'Download original' : 'Download'}</button>
       <button class="row-remove" data-id="${entry.id}" aria-label="Remove ${escapeHtml(entry.name)}">×</button>
     </div>
     ${hasResult ? `
@@ -511,6 +543,7 @@ async function processEntry(entry, settings) {
   const mime = settings.format === 'jpeg' ? 'image/jpeg' : settings.format === 'webp' ? 'image/webp' : 'image/png';
 
   let blob;
+  let targetMissed = false;
   if (settings.mode === 'target' && mime !== 'image/png' && settings.targetBytes > 0) {
     let low = 0.01;
     let high = 1.0;
@@ -526,6 +559,7 @@ async function processEntry(entry, settings) {
       }
     }
     blob = best || (await toBlobAsync(canvas, mime, low));
+    if (blob.size > settings.targetBytes) targetMissed = true;
   } else {
     blob = await toBlobAsync(canvas, mime, settings.quality);
   }
@@ -540,6 +574,21 @@ async function processEntry(entry, settings) {
   entry.outFormat = settings.format;
   entry.outWidth = width;
   entry.outHeight = height;
+  entry.targetMissed = targetMissed;
+}
+
+// Safe export: if compression didn't actually help, default to the original file
+// rather than silently handing back a larger one.
+function getExportForEntry(entry) {
+  const grew = entry.compressedSize != null && entry.originalSize > 0 && entry.compressedSize >= entry.originalSize;
+  if (grew) {
+    return { blob: entry.file, name: entry.name, usedOriginal: true };
+  }
+  const ext = entry.outFormat === 'jpeg' ? 'jpg' : entry.outFormat;
+  const name = keepOriginalNameCheckbox.checked
+    ? baseName(entry.name) + '.' + ext
+    : baseName(entry.name) + '-quantized.' + ext;
+  return { blob: entry.compressedBlob, name, usedOriginal: false };
 }
 
 async function processAll() {
@@ -595,17 +644,31 @@ function animateNumber(el, from, to, suffix, duration) {
   requestAnimationFrame(tick);
 }
 
+function describeSettings(settings) {
+  const parts = [settings.format.toUpperCase()];
+  if (settings.mode === 'target') {
+    parts.push(`Target ${targetSizeInput.value || '?'}${targetUnitSelect.value}`);
+  } else {
+    parts.push(`Quality ${qualitySlider.value}%`);
+  }
+  parts.push(settings.maxWidth ? `Max width ${settings.maxWidth}px` : 'No max width');
+  return parts.join(' · ');
+}
+
 function showResultsPanel() {
   const processed = state.entries.filter((e) => e.compressedSize != null);
   if (!processed.length) return;
   const totalOriginal = processed.reduce((s, e) => s + e.originalSize, 0);
   const totalCompressed = processed.reduce((s, e) => s + e.compressedSize, 0);
   const isSmaller = totalCompressed < totalOriginal;
+  const keptOriginalCount = processed.filter((e) => e.compressedSize >= e.originalSize).length;
+  const targetMissedCount = processed.filter((e) => e.targetMissed).length;
 
   resultsOriginalEl.textContent = fmtBytes(totalOriginal);
   resultsFinalEl.textContent = fmtBytes(totalCompressed);
   compressionCompleted = true;
   updateProcessButtonState();
+  resultsSettingsRecapEl.textContent = 'Current settings: ' + describeSettings(collectSettings());
 
   if (isSmaller) {
     const savedPct = totalOriginal > 0 ? Math.round((1 - totalCompressed / totalOriginal) * 100) : 0;
@@ -614,6 +677,8 @@ function showResultsPanel() {
     resultsHeroLabelEl.textContent = 'smaller';
     resultsHeroLabelEl.hidden = false;
     resultsFinalEl.classList.remove('no-reduction-color');
+    resultsSavedEl.textContent = 'Saved ' + fmtBytes(totalOriginal - totalCompressed);
+    resultsSavedEl.hidden = false;
     resultsNoteEl.hidden = true;
     tryLowerQualityBtn.hidden = true;
   } else {
@@ -621,9 +686,10 @@ function showResultsPanel() {
     resultsPctEl.classList.add('no-reduction');
     resultsHeroLabelEl.hidden = true;
     resultsFinalEl.classList.add('no-reduction-color');
+    resultsSavedEl.hidden = true;
     resultsNoteEl.textContent = processed.length === 1
-      ? 'This image was already highly optimized.'
-      : 'These images were already highly optimized.';
+      ? 'Compression would increase this file size — keeping the original is recommended.'
+      : 'Compression would increase these file sizes — keeping the originals is recommended.';
     resultsNoteEl.hidden = false;
     tryLowerQualityBtn.hidden = false;
   }
@@ -631,7 +697,9 @@ function showResultsPanel() {
   if (processed.length === 1) {
     // Single image: show output metadata + a compact before/after preview.
     const entry = processed[0];
-    resultsMetaEl.textContent = `${(entry.outFormat || '').toUpperCase()} · ${entry.outWidth}×${entry.outHeight} · ${fmtBytes(entry.compressedSize)}`;
+    let meta = `${(entry.outFormat || '').toUpperCase()} · ${entry.outWidth}×${entry.outHeight} · ${fmtBytes(entry.compressedSize)}`;
+    if (entry.targetMissed) meta += ' · target not fully reached';
+    resultsMetaEl.textContent = meta;
     resultsMetaEl.hidden = false;
     resultsCountLineEl.hidden = true;
 
@@ -640,14 +708,25 @@ function showResultsPanel() {
     resultsAfterImg.src = entry.compareUrl;
     resultsPreviewEl.hidden = false;
 
-    downloadZipBtn.textContent = 'Download image →';
+    if (entry.compressedSize >= entry.originalSize) {
+      downloadZipBtn.textContent = 'Keep original →';
+      downloadAnywayBtn.hidden = false;
+      downloadAnywayBtn.textContent = `Download compressed version anyway (${fmtBytes(entry.compressedSize)})`;
+    } else {
+      downloadZipBtn.textContent = 'Download image →';
+      downloadAnywayBtn.hidden = true;
+    }
   } else {
     resultsMetaEl.hidden = true;
-    resultsCountLineEl.textContent = `${processed.length} images compressed`;
+    let countText = `${processed.length} images compressed`;
+    if (keptOriginalCount > 0) countText += ` · ${keptOriginalCount} kept at original size`;
+    if (targetMissedCount > 0) countText += ` · ${targetMissedCount} didn't fully reach target`;
+    resultsCountLineEl.textContent = countText;
     resultsCountLineEl.hidden = false;
     resultsPreviewEl.hidden = true;
+    downloadAnywayBtn.hidden = true;
 
-    downloadZipBtn.textContent = 'Download all · ZIP →';
+    downloadZipBtn.textContent = `Download ZIP (${processed.length} image${processed.length > 1 ? 's' : ''}) →`;
   }
 
   resultsPanel.classList.add('visible');
@@ -708,12 +787,87 @@ dropZone.addEventListener('dragleave', () => {
   dropZone.classList.remove('dragover');
   dropZoneHeadline.innerHTML = DROP_ZONE_IDLE_HTML;
 });
-dropZone.addEventListener('drop', (e) => {
+dropZone.addEventListener('drop', async (e) => {
   e.preventDefault();
   dropZone.classList.remove('dragover');
   dropZoneHeadline.innerHTML = DROP_ZONE_IDLE_HTML;
-  if (e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
+  const files = await getFilesFromDataTransfer(e.dataTransfer);
+  if (files.length) addFiles(files);
 });
+
+// Reads dropped files, including recursing into folders where the browser supports it
+// (Chrome/Edge/Firefox via webkitGetAsEntry). Falls back to the flat file list otherwise.
+function getFilesFromDataTransfer(dataTransfer) {
+  return new Promise((resolve) => {
+    const items = dataTransfer.items;
+    if (!items || !items.length || typeof items[0].webkitGetAsEntry !== 'function') {
+      resolve(Array.from(dataTransfer.files));
+      return;
+    }
+
+    const topEntries = [];
+    for (let i = 0; i < items.length; i++) {
+      const entry = items[i].webkitGetAsEntry();
+      if (entry) topEntries.push(entry);
+    }
+    if (topEntries.length === 0) {
+      resolve(Array.from(dataTransfer.files));
+      return;
+    }
+
+    const files = [];
+    let pending = 0;
+    let dispatched = false;
+
+    function checkDone() {
+      if (dispatched && pending === 0) resolve(files);
+    }
+
+    function readDirectory(dirEntry) {
+      pending++;
+      const reader = dirEntry.createReader();
+      function readBatch() {
+        reader.readEntries((batch) => {
+          if (batch.length === 0) {
+            pending--;
+            checkDone();
+            return;
+          }
+          batch.forEach((child) => {
+            if (child.isFile) {
+              pending++;
+              child.file((file) => {
+                files.push(file);
+                pending--;
+                checkDone();
+              }, () => { pending--; checkDone(); });
+            } else if (child.isDirectory) {
+              readDirectory(child);
+            }
+          });
+          readBatch(); // directory readers return results in batches; keep reading until empty
+        }, () => { pending--; checkDone(); });
+      }
+      readBatch();
+    }
+
+    topEntries.forEach((entry) => {
+      if (entry.isFile) {
+        pending++;
+        entry.file((file) => {
+          files.push(file);
+          pending--;
+          checkDone();
+        }, () => { pending--; checkDone(); });
+      } else if (entry.isDirectory) {
+        readDirectory(entry);
+      }
+    });
+
+    dispatched = true;
+    checkDone();
+  });
+}
 
 fileInput.addEventListener('change', (e) => {
   if (e.target.files.length) addFiles(e.target.files);
@@ -735,6 +889,12 @@ clearAllBtn.addEventListener('click', () => {
   downloadZipBtn.disabled = true;
   progressWrap.hidden = true;
   estimateBox.hidden = true;
+  updateFileListToggle();
+});
+
+fileListToggleBtn.addEventListener('click', () => {
+  fileListEl.classList.toggle('expanded');
+  updateFileListToggle();
 });
 
 fileListEl.addEventListener('click', (e) => {
@@ -745,8 +905,8 @@ fileListEl.addEventListener('click', (e) => {
   } else if (e.target.classList.contains('row-download')) {
     const entry = state.entries.find((en) => en.id === id);
     if (entry && entry.compressedBlob) {
-      const ext = entry.outFormat === 'jpeg' ? 'jpg' : entry.outFormat;
-      downloadBlob(entry.compressedBlob, baseName(entry.name) + '-quantized.' + ext);
+      const { blob, name } = getExportForEntry(entry);
+      downloadBlob(blob, name);
     }
   } else if (e.target.classList.contains('row-compare')) {
     toggleCompare(id);
@@ -755,14 +915,20 @@ fileListEl.addEventListener('click', (e) => {
   }
 });
 
+function clearPresetActive() {
+  presetButtons.forEach((btn) => btn.classList.remove('active'));
+}
+
 qualitySlider.addEventListener('input', () => {
   qualityValueLabel.textContent = qualitySlider.value + '%';
+  clearPresetActive();
   scheduleEstimate();
 });
 
 document.querySelectorAll('input[name="mode"]').forEach((radio) => {
   radio.addEventListener('change', () => {
     updateModeVisibility();
+    clearPresetActive();
     scheduleEstimate();
   });
 });
@@ -784,12 +950,39 @@ formatSelect.addEventListener('change', () => {
     document.querySelector('input[name="mode"][value="quality"]').checked = true;
     updateModeVisibility();
   }
+  clearPresetActive();
   scheduleEstimate();
 });
 
-maxWidthInput.addEventListener('input', scheduleEstimate);
+maxWidthInput.addEventListener('input', () => {
+  clearPresetActive();
+  scheduleEstimate();
+});
 targetSizeInput.addEventListener('input', scheduleEstimate);
 targetUnitSelect.addEventListener('change', scheduleEstimate);
+
+presetButtons.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const preset = PRESETS[btn.dataset.preset];
+    if (!preset) return;
+
+    formatSelect.value = preset.format;
+    formatSelect.dispatchEvent(new Event('change'));
+
+    document.querySelector(`input[name="mode"][value="${preset.mode}"]`).checked = true;
+    updateModeVisibility();
+
+    qualitySlider.value = preset.quality;
+    qualityValueLabel.textContent = preset.quality + '%';
+
+    maxWidthInput.value = preset.maxWidth;
+
+    presetButtons.forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    scheduleEstimate();
+  });
+});
 
 processAllBtn.addEventListener('click', processAll);
 
@@ -799,8 +992,8 @@ downloadZipBtn.addEventListener('click', async () => {
 
   if (processed.length === 1) {
     const entry = processed[0];
-    const ext = entry.outFormat === 'jpeg' ? 'jpg' : entry.outFormat;
-    downloadBlob(entry.compressedBlob, baseName(entry.name) + '-quantized.' + ext);
+    const { blob, name } = getExportForEntry(entry);
+    downloadBlob(blob, name);
     return;
   }
 
@@ -811,9 +1004,9 @@ downloadZipBtn.addEventListener('click', async () => {
   const zipFiles = [];
   for (let i = 0; i < processed.length; i++) {
     const entry = processed[i];
-    const ext = entry.outFormat === 'jpeg' ? 'jpg' : entry.outFormat;
-    const arrayBuf = await entry.compressedBlob.arrayBuffer();
-    const safeName = `${i + 1}-${baseName(entry.name)}-quantized.${ext}`;
+    const { blob, name } = getExportForEntry(entry);
+    const arrayBuf = await blob.arrayBuffer();
+    const safeName = `${i + 1}-${name}`;
     zipFiles.push({ name: safeName, data: new Uint8Array(arrayBuf) });
   }
 
@@ -821,6 +1014,14 @@ downloadZipBtn.addEventListener('click', async () => {
   downloadBlob(zipBlob, 'quantize-export.zip');
   downloadZipBtn.disabled = false;
   downloadZipBtn.textContent = originalLabel;
+});
+
+downloadAnywayBtn.addEventListener('click', () => {
+  const processed = state.entries.filter((e) => e.compressedBlob);
+  if (processed.length !== 1) return;
+  const entry = processed[0];
+  const ext = entry.outFormat === 'jpeg' ? 'jpg' : entry.outFormat;
+  downloadBlob(entry.compressedBlob, baseName(entry.name) + '-quantized.' + ext);
 });
 
 compressAgainBtn.addEventListener('click', () => {
@@ -845,6 +1046,30 @@ tryLowerQualityBtn.addEventListener('click', () => {
 
 addMoreResultsBtn.addEventListener('click', () => fileInput.click());
 
+// ============ Lightbox (full-size before/after preview) ============
+
+document.addEventListener('click', (e) => {
+  if (e.target.matches('.compare-before-img, .compare-after-img, #resultsBeforeImg, #resultsAfterImg')) {
+    if (e.target.src) {
+      lightboxImg.src = e.target.src;
+      lightbox.hidden = false;
+    }
+  }
+});
+
+function closeLightbox() {
+  lightbox.hidden = true;
+  lightboxImg.src = '';
+}
+
+lightboxClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox) closeLightbox();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !lightbox.hidden) closeLightbox();
+});
+
 // ============ Init ============
 
 updateModeVisibility();
@@ -852,3 +1077,4 @@ updateSummary();
 updateProcessButtonState();
 updateDropZoneVisibility();
 updatePreviewBar();
+updateFileListToggle();
