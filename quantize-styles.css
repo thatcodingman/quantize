@@ -264,26 +264,26 @@ select:disabled, input:disabled { opacity: .5; cursor: not-allowed; }
 .progress-file { font-family: var(--mono); font-size: .78rem; color: var(--ink); margin: 4px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* Results / completion state */
-.results-panel { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.results-panel { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); }
 .results-panel.visible { display: block; }
 .results-status {
   font-family: var(--mono); font-size: .78rem; color: var(--after); font-weight: 700;
-  margin: 0 0 8px; text-transform: uppercase; letter-spacing: .04em;
+  margin: 0 0 6px; text-transform: uppercase; letter-spacing: .04em;
 }
-.results-hero { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+.results-hero { display: flex; align-items: baseline; gap: 8px; margin-bottom: 3px; }
 .results-hero-pct { font-family: var(--display); font-weight: 800; font-size: 2.3rem; line-height: 1; color: var(--after); }
 .results-hero-pct.no-reduction { font-size: 1.5rem; color: var(--before); text-transform: uppercase; letter-spacing: .03em; }
 .results-hero-label { font-family: var(--mono); font-size: .95rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-.results-sizes { font-family: var(--mono); font-size: 1.1rem; color: var(--ink); margin: 0 0 5px; }
+.results-sizes { font-family: var(--mono); font-size: 1.1rem; color: var(--ink); margin: 0 0 4px; }
 .results-sizes #resultsOriginal { font-weight: 700; }
 .results-sizes .arrow { margin: 0 6px; color: var(--muted); }
 .results-sizes .accent { color: var(--after); font-weight: 700; }
 .results-sizes .accent.no-reduction-color { color: var(--before); }
 .results-tag { font-family: var(--mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-right: 4px; }
-.results-saved { font-family: var(--mono); font-size: .96rem; color: var(--after); font-weight: 700; margin: 0 0 10px; }
+.results-saved { font-family: var(--mono); font-size: .96rem; color: var(--after); font-weight: 700; margin: 0 0 7px; }
 .results-saved[hidden] { display: none; }
 .results-ready {
-  margin: 4px 0 8px;
+  margin: 3px 0 6px;
 }
 .results-ready[hidden] { display: none; }
 .results-ready-badge {
@@ -292,29 +292,29 @@ select:disabled, input:disabled { opacity: .5; cursor: not-allowed; }
   color: var(--after); background: var(--drop-hover-bg); border: 1px solid var(--after);
   padding: 4px 11px; border-radius: 999px;
 }
-.results-note { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 0 0 10px; }
+.results-note { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 0 0 7px; }
 .results-note[hidden] { display: none; }
-.results-meta { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 0 0 10px; }
+.results-meta { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 0 0 7px; }
 .results-meta[hidden] { display: none; }
-.results-count { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 0 0 10px; }
+.results-count { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 0 0 7px; }
 .results-count[hidden] { display: none; }
 .results-preview {
   display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-  margin-bottom: 12px; max-width: 420px;
+  margin-bottom: 9px; max-width: 420px;
 }
 .results-preview[hidden] { display: none; }
 .results-preview-col { text-align: center; }
 .results-preview-col img {
   width: 100%; max-height: 140px; object-fit: contain; border-radius: 4px;
-  background: var(--paper); border: 1px solid var(--line); cursor: zoom-in;
+  background: var(--paper); border: 2px solid var(--line); cursor: zoom-in;
 }
 .results-preview-col .compare-label { display: block; margin-top: 4px; }
-#tryLowerQualityBtn { width: 100%; margin-bottom: 10px; }
+#tryLowerQualityBtn { width: 100%; margin-bottom: 8px; }
 #tryLowerQualityBtn[hidden] { display: none; }
 .results-download-summary {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
   font-family: var(--mono); font-size: .78rem; color: var(--muted);
-  margin: 0 0 10px; padding: 8px 12px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  margin: 0 0 8px; padding: 7px 11px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
 }
 .results-download-summary[hidden] { display: none; }
 .copy-btn {
@@ -327,12 +327,12 @@ select:disabled, input:disabled { opacity: .5; cursor: not-allowed; }
 .text-link {
   display: block; width: 100%; text-align: center; background: none; border: none;
   font-family: var(--mono); font-size: .78rem; color: var(--muted); text-decoration: underline;
-  cursor: pointer; padding: 8px 0 0;
+  cursor: pointer; padding: 6px 0 0;
 }
 .text-link:hover { color: var(--ink); }
 .text-link[hidden] { display: none; }
-.results-settings-recap { font-family: var(--mono); font-size: .76rem; color: var(--muted); margin: 10px 0 0; text-align: center; }
-.results-secondary { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.results-settings-recap { font-family: var(--mono); font-size: .76rem; color: var(--muted); margin: 8px 0 0; text-align: center; }
+.results-secondary { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
 .results-secondary button { flex: 1; min-width: 140px; }
 
 /* File list */
@@ -392,10 +392,17 @@ select:disabled, input:disabled { opacity: .5; cursor: not-allowed; }
 .compare-col { text-align: center; }
 .compare-col img {
   width: 100%; max-height: 190px; object-fit: contain; border-radius: 4px;
-  background: var(--paper); border: 1px solid var(--line); cursor: zoom-in;
+  background: var(--paper); border: 2px solid var(--line); cursor: zoom-in;
 }
-.compare-label { font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 8px 0 2px; }
+.compare-label { font-family: var(--mono); font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 8px 0 2px; }
 .compare-meta { font-family: var(--mono); font-size: .78rem; color: var(--ink); margin: 0; }
+
+/* Reuse the same before/after color language as the file-list size tags,
+   so Original vs Compressed is distinguishable at a glance. */
+.compare-col:first-child img, .results-preview-col:first-child img { border-color: var(--before); }
+.compare-col:last-child img, .results-preview-col:last-child img { border-color: var(--after); }
+.compare-col:first-child .compare-label, .results-preview-col:first-child .compare-label { color: var(--before); }
+.compare-col:last-child .compare-label, .results-preview-col:last-child .compare-label { color: var(--after); }
 
 footer { border-top: 1px solid var(--line); padding: 32px; margin-top: 40px; background: var(--paper); }
 footer .foot-inner { max-width: 1040px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
