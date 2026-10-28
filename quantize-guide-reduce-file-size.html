@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q3MKYL0ENC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Q3MKYL0ENC');
+</script>
+<script>
+(function(){
+  try {
+    var saved = localStorage.getItem('quantize-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {}
+})();
+</script>
+<title>How to Reduce Image File Size Without Losing Quality — Quantize</title>
+<meta name="description" content="Shrink photos down without visible quality loss. The four things that actually control file size, in the order that matters.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://quantizeapp.com/quantize-guide-reduce-file-size.html">
+<link rel="canonical" href="https://quantizeapp.com/quantize-guide-reduce-file-size.html">
+<meta property="og:title" content="How to Reduce Image File Size Without Losing Quality">
+<meta property="og:description" content="Shrink photos down without visible quality loss. The four things that actually control file size, in the order that matters.">
+<meta property="og:image" content="https://quantizeapp.com/quantize-og.png">
+<meta property="og:site_name" content="Quantize">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to Reduce Image File Size Without Losing Quality">
+<meta name="twitter:description" content="Shrink photos down without visible quality loss. The four things that actually control file size, in the order that matters.">
+<meta name="twitter:image" content="https://quantizeapp.com/quantize-og.png">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="quantize-styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to reduce image file size without losing quality",
+  "description": "The four main levers for shrinking a photo's file size while keeping it visually indistinguishable from the original.",
+  "step": [
+    { "@type": "HowToStep", "name": "Resize the dimensions first", "text": "A photo twice as wide and tall has roughly four times the pixel data. If the image is being displayed smaller than its original resolution, resizing it to the actual display size is the single biggest size reduction available, with zero visible quality loss." },
+    { "@type": "HowToStep", "name": "Pick an efficient format", "text": "WebP and JPG compress photographic detail far more efficiently than PNG. Converting a photo from PNG to JPG or WebP alone can cut the file size by 70-90% before any quality setting is touched." },
+    { "@type": "HowToStep", "name": "Lower quality gradually, not drastically", "text": "Most of a JPG or WebP's visual quality survives down to roughly 75-85% quality; below that, compression artifacts start becoming visible, especially around edges and text. Drop quality in small steps rather than jumping straight to a low number." },
+    { "@type": "HowToStep", "name": "Strip unnecessary metadata", "text": "Camera photos often carry EXIF metadata, color profiles, and thumbnail previews that add a small but real amount of file size without affecting the visible image." }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <a href="index.html" class="wordmark">Quantize</a>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="quantize-about.html">About</a>
+    <a href="quantize-faq.html">FAQ</a>
+    <a href="quantize-contact.html">Contact</a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">Dark</button>
+  </nav>
+</header>
+
+<main>
+  <div class="legal">
+    <h1>How to reduce image file size without losing quality</h1>
+    <p class="updated">The four levers that actually matter, in order</p>
+
+    <p>"Without losing quality" usually means "without losing <em>visible</em> quality" — every compression method technically changes data, but done right, the difference is invisible to the eye while the file gets dramatically smaller. Here's what actually controls file size, ranked by how much it matters.</p>
+
+    <h2>1. Resize the dimensions — the biggest lever by far</h2>
+    <p>A photo that's twice as wide and twice as tall has roughly four times the pixel data to store. If an image is being displayed at, say, 800px wide on a page but the original file is 4000px wide, you're storing 25x more detail than anyone will ever see. Scaling the image down to its actual display size, before any compression happens, is usually the single largest size reduction available — and because nothing beyond the original resolution was ever visible anyway, it costs nothing in perceived quality.</p>
+
+    <h2>2. Pick a format built for photos</h2>
+    <p>PNG is lossless, which sounds like a quality win, but it means PNG can't compress photographic gradients and detail nearly as well as JPG or WebP can. Converting a photo from PNG to JPG or WebP — with no other changes — commonly cuts file size by 70-90% on its own. (See <a href="quantize-guide-jpg-vs-png-vs-webp.html">JPG vs PNG vs WebP</a> for when each format actually makes sense.)</p>
+
+    <h2>3. Lower quality gradually, not drastically</h2>
+    <p>JPG and WebP both use a quality setting, typically 1-100. Most of the visual information survives comfortably down to around 75-85% — this is usually the sweet spot where file size drops noticeably but nothing looks different at a glance. Below roughly 60-70%, compression artifacts (blocky patches, blurring around edges and text) start becoming visible, especially if someone zooms in. The mistake most people make is jumping straight to a low number instead of testing incrementally; a <a href="index.html">target file size mode</a> that automatically finds the highest quality that still hits your size goal avoids this entirely.</p>
+
+    <h2>4. Strip unnecessary metadata</h2>
+    <p>Photos straight off a phone or camera often carry EXIF data (camera settings, GPS location, timestamps), embedded color profiles, and sometimes a thumbnail preview baked into the file. None of it affects the visible image, but it adds real, if usually small, file size — and for photos with location data, stripping it is also a privacy plus before sharing publicly.</p>
+
+    <h2>What doesn't help as much as people assume</h2>
+    <p>Re-compressing an already-compressed JPG repeatedly does reduce file size slightly each time, but it also compounds quality loss with each pass — it's not a reliable technique. It's almost always better to start from the original, uncompressed source and apply the right format, quality, and dimensions once.</p>
+
+    <p>Want to apply all of this to a whole folder at once? <a href="index.html">Quantize</a> resizes, converts, and compresses batches of photos directly in your browser, with a target file size mode that handles step 3 automatically.</p>
+  </div>
+</main>
+
+<footer>
+<p class="network-links">More free tools from us: <a href="https://usequietzone.com">Quiet Zone</a> — a QR code scanner and generator</p>
+  <div class="foot-inner">
+    <nav>
+      <a href="quantize-about.html">About</a>
+      <a href="quantize-faq.html">FAQ</a>
+      <a href="quantize-contact.html">Contact</a>
+      <a href="quantize-terms.html">Terms</a>
+      <a href="quantize-privacy.html">Privacy</a>
+    </nav>
+    <p>© 2026 Quantize</p>
+  </div>
+</footer>
+
+<script src="quantize-theme.js"></script>
+</body>
+</html>
