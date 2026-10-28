@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q3MKYL0ENC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Q3MKYL0ENC');
+</script>
+<script>
+(function(){
+  try {
+    var saved = localStorage.getItem('quantize-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {}
+})();
+</script>
+<title>Best Image Format and Size for a Fast Website — Quantize</title>
+<meta name="description" content="Large images are the most common cause of a slow website. Here's the format, dimensions, and compression settings that keep pages fast without hurting visuals.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://quantizeapp.com/quantize-guide-website-image-speed.html">
+<link rel="canonical" href="https://quantizeapp.com/quantize-guide-website-image-speed.html">
+<meta property="og:title" content="Best Image Format and Size for a Fast Website">
+<meta property="og:description" content="Large images are the most common cause of a slow website. Here's the format, dimensions, and compression settings that keep pages fast without hurting visuals.">
+<meta property="og:image" content="https://quantizeapp.com/quantize-og.png">
+<meta property="og:site_name" content="Quantize">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Best Image Format and Size for a Fast Website">
+<meta name="twitter:description" content="Large images are the most common cause of a slow website. Here's the format, dimensions, and compression settings that keep pages fast without hurting visuals.">
+<meta name="twitter:image" content="https://quantizeapp.com/quantize-og.png">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="quantize-styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What's the best image format for website speed?",
+      "acceptedAnswer": { "@type": "Answer", "text": "WebP, in most cases. It typically produces the smallest file for a given visual quality among the widely supported formats, which directly reduces page load time." }
+    },
+    {
+      "@type": "Question",
+      "name": "What image size should I use on a website?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Match the file's pixel dimensions to the largest size it will actually be displayed at, accounting for retina displays (roughly 1.5-2x the CSS display size), rather than uploading camera-resolution originals." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do images really affect page speed that much?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — images are typically the largest single contributor to total page weight on most websites, and oversized or unoptimized images are one of the most common causes of poor Core Web Vitals scores." }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <a href="index.html" class="wordmark">Quantize</a>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="quantize-about.html">About</a>
+    <a href="quantize-faq.html">FAQ</a>
+    <a href="quantize-contact.html">Contact</a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">Dark</button>
+  </nav>
+</header>
+
+<main>
+  <div class="legal">
+    <h1>Best image format and size for a fast website</h1>
+    <p class="updated">Images are usually the biggest thing on the page — here's how to fix that</p>
+
+    <p>On most websites, images make up the majority of the total page weight — often more than all the code, fonts, and scripts combined. If a site feels slow, oversized or badly-formatted images are the first place to look, and usually the easiest to fix.</p>
+
+    <h2>Format: WebP first, JPG as the fallback</h2>
+    <p>WebP is the best default for web images today — it typically produces the smallest file for a given visual quality of any widely supported format, which translates directly into faster page loads. JPG remains a safe universal fallback if you need to support very old browsers or tooling. PNG should generally be reserved for graphics that need transparency or flat colors (logos, icons, UI elements), not photos, since it produces much larger files for photographic content. See <a href="quantize-guide-jpg-vs-png-vs-webp.html">JPG vs PNG vs WebP</a> for the full comparison.</p>
+
+    <h2>Dimensions: match the actual display size</h2>
+    <p>This is the single most common mistake: uploading a camera- or phone-resolution photo (often 3000-4000px wide) when the page only ever displays it at 800px. The extra resolution is invisible to visitors but fully downloaded by every one of them. A good rule of thumb is to size images at roughly 1.5-2x their largest CSS display size, to account for high-density (retina) screens, and no larger.</p>
+
+    <h2>Compression: aim for "visually identical," not "smallest possible"</h2>
+    <p>Pushing quality settings as low as possible technically produces the smallest file, but once compression artifacts become visible, it starts working against the site — a blurry or blocky image looks worse than a slightly larger, clean one. A quality setting around 75-85% for JPG/WebP is usually the point where file size has dropped substantially with no visible difference. If you have a specific page-weight budget, a target file size mode removes the guesswork. For the full breakdown of what actually shrinks a file, see <a href="quantize-guide-reduce-file-size.html">how to reduce image file size without losing quality</a>.</p>
+
+    <h2>Why this matters beyond "feeling" fast</h2>
+    <p>Page speed affects more than user experience — Google's Core Web Vitals, which factor into search ranking, are directly influenced by how quickly the largest visible content on a page loads (the "Largest Contentful Paint" metric), and that's very often an image. Optimizing images isn't just a nice-to-have; on image-heavy pages it's frequently the single biggest lever for improving a site's actual search performance.</p>
+
+    <p>Got a batch of images to optimize for a site? <a href="index.html">Quantize</a> resizes, converts to WebP or JPG, and compresses to a target size — all in your browser, all at once.</p>
+  </div>
+</main>
+
+<footer>
+<p class="network-links">More free tools from us: <a href="https://usequietzone.com">Quiet Zone</a> — a QR code scanner and generator</p>
+  <div class="foot-inner">
+    <nav>
+      <a href="quantize-about.html">About</a>
+      <a href="quantize-faq.html">FAQ</a>
+      <a href="quantize-contact.html">Contact</a>
+      <a href="quantize-terms.html">Terms</a>
+      <a href="quantize-privacy.html">Privacy</a>
+    </nav>
+    <p>© 2026 Quantize</p>
+  </div>
+</footer>
+
+<script src="quantize-theme.js"></script>
+</body>
+</html>
