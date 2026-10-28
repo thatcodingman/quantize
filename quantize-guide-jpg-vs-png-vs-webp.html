@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q3MKYL0ENC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Q3MKYL0ENC');
+</script>
+<script>
+(function(){
+  try {
+    var saved = localStorage.getItem('quantize-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {}
+})();
+</script>
+<title>JPG vs PNG vs WebP: Which Should You Use? — Quantize</title>
+<meta name="description" content="A plain-language breakdown of when to use JPG, PNG, or WebP — file size, transparency, quality loss, and browser support compared.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://quantizeapp.com/quantize-guide-jpg-vs-png-vs-webp.html">
+<link rel="canonical" href="https://quantizeapp.com/quantize-guide-jpg-vs-png-vs-webp.html">
+<meta property="og:title" content="JPG vs PNG vs WebP: Which Should You Use?">
+<meta property="og:description" content="A plain-language breakdown of when to use JPG, PNG, or WebP — file size, transparency, quality loss, and browser support compared.">
+<meta property="og:image" content="https://quantizeapp.com/quantize-og.png">
+<meta property="og:site_name" content="Quantize">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="JPG vs PNG vs WebP: Which Should You Use?">
+<meta name="twitter:description" content="A plain-language breakdown of when to use JPG, PNG, or WebP — file size, transparency, quality loss, and browser support compared.">
+<meta name="twitter:image" content="https://quantizeapp.com/quantize-og.png">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="quantize-styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What's the main difference between JPG, PNG, and WebP?",
+      "acceptedAnswer": { "@type": "Answer", "text": "JPG uses lossy compression and is best for photos. PNG is lossless and supports transparency, best for graphics and screenshots. WebP supports both lossy and lossless modes and usually produces the smallest file for a given quality." }
+    },
+    {
+      "@type": "Question",
+      "name": "Which format is smallest?",
+      "acceptedAnswer": { "@type": "Answer", "text": "WebP is usually the smallest for a given visual quality, often 25-35% smaller than an equivalent JPG and significantly smaller than PNG for photographic content." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does WebP work everywhere?",
+      "acceptedAnswer": { "@type": "Answer", "text": "All major modern browsers support WebP. The main exception is older or specialized software that hasn't been updated, where JPG remains the safer universal choice." }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <a href="index.html" class="wordmark">Quantize</a>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="quantize-about.html">About</a>
+    <a href="quantize-faq.html">FAQ</a>
+    <a href="quantize-contact.html">Contact</a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">Dark</button>
+  </nav>
+</header>
+
+<main>
+  <div class="legal">
+    <h1>JPG vs PNG vs WebP: which should you use?</h1>
+    <p class="updated">A plain-language breakdown, not a spec sheet</p>
+
+    <p>All three are everywhere, and picking the wrong one is the single biggest reason images end up larger than they need to be. Here's what actually matters for each, without the technical detail you don't need to make the decision.</p>
+
+    <h2>JPG — the safe default for photos</h2>
+    <p>JPG uses lossy compression, meaning it throws away some detail to shrink the file, in a way that's barely visible at reasonable quality settings. It works everywhere — every browser, every device, every piece of software made in the last 25 years — which makes it the safest universal choice. It doesn't support transparency, and because it's lossy, re-saving a JPG repeatedly gradually degrades quality.</p>
+    <p><strong>Use it for:</strong> photos being shared, emailed, or posted where maximum compatibility matters more than squeezing out the last few percent of file size.</p>
+
+    <h2>PNG — lossless, with transparency</h2>
+    <p>PNG keeps every pixel exactly as-is, so there's no quality loss no matter how many times you re-save it. It also supports transparency, which JPG doesn't. The tradeoff is file size: a PNG photo is often 3-5x larger than the same photo as a well-compressed JPG, since lossless compression can't throw anything away.</p>
+    <p><strong>Use it for:</strong> screenshots, logos, icons, graphics with flat colors or text, and anything that needs a transparent background.</p>
+
+    <h2>WebP — usually the smallest, now widely supported</h2>
+    <p>WebP supports both lossy and lossless compression in one format, and at a given visual quality it typically produces the smallest file of the three — often 25-35% smaller than an equivalent JPG, and dramatically smaller than PNG for photographic content while still supporting transparency. All major modern browsers support it; the only real holdout is older or niche software that hasn't been updated.</p>
+    <p><strong>Use it for:</strong> anything headed to a website, where smaller files mean faster page loads, as long as you don't have a hard requirement to support very old software.</p>
+
+    <h2>Quick decision</h2>
+    <p>Photo for the web, and speed matters → <strong>WebP</strong>. Photo being emailed or shared where you're not sure what will open it → <strong>JPG</strong>. Screenshot, logo, or anything needing a transparent background → <strong>PNG</strong>, or WebP if the destination supports it.</p>
+
+    <p>Converting between formats in bulk? <a href="index.html">Quantize</a> compresses and converts batches of images between all three directly in your browser — no uploads, no waiting. Sending photos by email? See <a href="quantize-guide-email-attachments.html">how to compress images to fit email attachment limits</a>.</p>
+  </div>
+</main>
+
+<footer>
+<p class="network-links">More free tools from us: <a href="https://usequietzone.com">Quiet Zone</a> — a QR code scanner and generator</p>
+  <div class="foot-inner">
+    <nav>
+      <a href="quantize-about.html">About</a>
+      <a href="quantize-faq.html">FAQ</a>
+      <a href="quantize-contact.html">Contact</a>
+      <a href="quantize-terms.html">Terms</a>
+      <a href="quantize-privacy.html">Privacy</a>
+    </nav>
+    <p>© 2026 Quantize</p>
+  </div>
+</footer>
+
+<script src="quantize-theme.js"></script>
+</body>
+</html>

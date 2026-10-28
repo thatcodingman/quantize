@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q3MKYL0ENC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-Q3MKYL0ENC');
+</script>
+<script>
+(function(){
+  try {
+    var saved = localStorage.getItem('quantize-theme');
+    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+  } catch (e) {}
+})();
+</script>
+<title>How to Compress Images to Fit Email Attachment Limits — Quantize</title>
+<meta name="description" content="Gmail, Outlook, and most providers cap attachments around 25MB. Here's how to get a batch of photos under that limit without losing noticeable quality, in one pass.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://quantizeapp.com/quantize-guide-email-attachments.html">
+<link rel="canonical" href="https://quantizeapp.com/quantize-guide-email-attachments.html">
+<meta property="og:title" content="How to Compress Images to Fit Email Attachment Limits">
+<meta property="og:description" content="Gmail, Outlook, and most providers cap attachments around 25MB. Here's how to get a batch of photos under that limit without losing noticeable quality, in one pass.">
+<meta property="og:image" content="https://quantizeapp.com/quantize-og.png">
+<meta property="og:site_name" content="Quantize">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to Compress Images to Fit Email Attachment Limits">
+<meta name="twitter:description" content="Gmail, Outlook, and most providers cap attachments around 25MB. Here's how to get a batch of photos under that limit without losing noticeable quality, in one pass.">
+<meta name="twitter:image" content="https://quantizeapp.com/quantize-og.png">
+<meta name="robots" content="index, follow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="quantize-styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to compress images to fit email attachment limits",
+  "description": "Steps to shrink a batch of photos so they fit under Gmail, Outlook, and other providers' attachment size limits.",
+  "step": [
+    { "@type": "HowToStep", "name": "Know your limit", "text": "Most providers cap attachments around 25MB total, sometimes lower for the recipient's inbox. Check the exact limit if you're unsure." },
+    { "@type": "HowToStep", "name": "Set a target size per image", "text": "Divide your limit by the number of photos, then subtract a margin for email overhead. Use a target file size mode to hit that number exactly." },
+    { "@type": "HowToStep", "name": "Choose a web-friendly format", "text": "Convert to JPG or WebP rather than keeping PNG, since PNG doesn't compress photos as efficiently." },
+    { "@type": "HowToStep", "name": "Compress the whole batch at once", "text": "Process every photo together instead of one at a time so the total fits the limit, not just each individual file." }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <a href="index.html" class="wordmark">Quantize</a>
+  <nav class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="quantize-about.html">About</a>
+    <a href="quantize-faq.html">FAQ</a>
+    <a href="quantize-contact.html">Contact</a>
+    <button id="themeToggle" class="theme-toggle" aria-label="Switch to dark theme">Dark</button>
+  </nav>
+</header>
+
+<main>
+  <div class="legal">
+    <h1>How to compress images to fit email attachment limits</h1>
+    <p class="updated">A quick guide to the 25MB wall everyone eventually hits</p>
+
+    <p>Most email providers — Gmail, Outlook, Yahoo — cap total attachment size around 25MB per message. It's an easy limit to hit without realizing it: ten photos straight off a modern phone can run 30-50MB combined, well before you've added any text. Here's the fastest way to get a batch of photos under the limit without eyeballing each one individually.</p>
+
+    <h2>1. Know your actual limit</h2>
+    <p>25MB is the most common ceiling, but some providers enforce it more strictly than others, and a recipient's own inbox might be tighter. If you're sending to a work address, check whether their IT department enforces something lower — 10MB and 15MB caps aren't unusual at larger companies.</p>
+
+    <h2>2. Set a target size per image, not a vague "smaller"</h2>
+    <p>If you're sending 8 photos and have a 25MB budget, that's roughly 3MB per photo before overhead — but email encoding adds about 33% to the real file size, so aim closer to 2MB per image to be safe. Rather than guessing at a quality slider and re-exporting repeatedly, a <a href="index.html">target file size mode</a> lets you type the number directly and have it find the right compression level automatically.</p>
+
+    <h2>3. Convert to JPG or WebP, not PNG</h2>
+    <p>PNG is a lossless format, which means it doesn't compress photographic detail nearly as efficiently as JPG or WebP. A PNG screenshot is fine to keep as PNG, but a PNG photo converted to JPG at high quality often shrinks by 70-90% with no visible difference to the eye. If transparency isn't needed in the image, there's rarely a reason to keep it as PNG for sending.</p>
+
+    <h2>4. Process the whole batch together</h2>
+    <p>Compressing one photo at a time and checking each result against the limit is slow and error-prone. Processing the entire batch at once — with the same format and target size applied across all of them — gets you a predictable total in one pass instead of several rounds of trial and error.</p>
+
+    <h2>5. If it's still too big, resize the dimensions</h2>
+    <p>Quality compression can only go so far before photos start looking visibly degraded. If a batch still won't fit after compressing, scaling down the pixel dimensions (most email photos don't need to be wider than 2000px) is usually the next biggest lever, and does less visible damage than pushing quality too low.</p>
+
+    <p>Want to try this directly? <a href="index.html">Quantize's batch compressor</a> handles all of the above in your browser — drop in your photos, set a target size, and download them ready to attach. Not sure which output format to pick? See <a href="quantize-guide-jpg-vs-png-vs-webp.html">JPG vs PNG vs WebP: which should you use?</a></p>
+  </div>
+</main>
+
+<footer>
+<p class="network-links">More free tools from us: <a href="https://usequietzone.com">Quiet Zone</a> — a QR code scanner and generator</p>
+  <div class="foot-inner">
+    <nav>
+      <a href="quantize-about.html">About</a>
+      <a href="quantize-faq.html">FAQ</a>
+      <a href="quantize-contact.html">Contact</a>
+      <a href="quantize-terms.html">Terms</a>
+      <a href="quantize-privacy.html">Privacy</a>
+    </nav>
+    <p>© 2026 Quantize</p>
+  </div>
+</footer>
+
+<script src="quantize-theme.js"></script>
+</body>
+</html>

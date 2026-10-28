@@ -28,10 +28,59 @@
 <meta property="og:title" content="FAQ — Quantize">
 <meta property="og:description" content="Answers about batch compression, target file size mode, formats, and what happens to your photos.">
 <meta property="og:image" content="https://quantizeapp.com/quantize-og.png">
+<meta property="og:site_name" content="Quantize">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FAQ — Quantize">
+<meta name="twitter:description" content="Answers about batch compression, target file size mode, formats, and what happens to your photos.">
+<meta name="twitter:image" content="https://quantizeapp.com/quantize-og.png">
+<meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="quantize-styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Do my photos get uploaded anywhere?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. Every step — reading the file, resizing, compressing, zipping — happens locally in your browser. Nothing is ever sent to a server." }
+    },
+    {
+      "@type": "Question",
+      "name": "How does target file size mode work?",
+      "acceptedAnswer": { "@type": "Answer", "text": "You type in a size like 500 KB and Quantize automatically tests different compression levels until it finds one that lands at or just under that size." }
+    },
+    {
+      "@type": "Question",
+      "name": "Why doesn't target size work with PNG?",
+      "acceptedAnswer": { "@type": "Answer", "text": "PNG is a lossless format with no quality setting to adjust, so there's no compression level to search through. Try WebP for a smaller file at similar quality." }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between JPG, PNG, and WebP?",
+      "acceptedAnswer": { "@type": "Answer", "text": "JPG is the most compatible and compresses photos well but has no transparency. PNG is lossless with transparency but larger for photos. WebP usually gives the smallest file for a given quality and supports transparency." }
+    },
+    {
+      "@type": "Question",
+      "name": "What does the Max width field do?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Any image wider than that value gets scaled down proportionally before compression, which is often the single biggest lever for reducing file size." }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a limit to how many images I can process at once?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No hard limit, but very large batches take longer since everything is processed on your device rather than a server." }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I download just one image instead of the whole zip?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — every processed image has its own Download button in the file list, in addition to the Download all zip option." }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 

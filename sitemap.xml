@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://quantizeapp.com/</loc></url>
-  <url><loc>https://quantizeapp.com/quantize-about.html</loc></url>
-  <url><loc>https://quantizeapp.com/quantize-faq.html</loc></url>
-  <url><loc>https://quantizeapp.com/quantize-contact.html</loc></url>
-  <url><loc>https://quantizeapp.com/quantize-terms.html</loc></url>
-  <url><loc>https://quantizeapp.com/quantize-privacy.html</loc></url>
+  <url><loc>https://quantizeapp.com/</loc><lastmod>2026-10-27</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://quantizeapp.com/quantize-about.html</loc><lastmod>2026-10-27</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://quantizeapp.com/quantize-faq.html</loc><lastmod>2026-10-27</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://quantizeapp.com/quantize-contact.html</loc><lastmod>2026-10-27</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://quantizeapp.com/quantize-terms.html</loc><lastmod>2026-08-04</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://quantizeapp.com/quantize-privacy.html</loc><lastmod>2026-08-06</lastmod><changefreq>yearly</changefreq><priority>0.2</priority></url>
+  <url><loc>https://quantizeapp.com/quantize-guide-email-attachments.html</loc><lastmod>2026-10-27</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://quantizeapp.com/quantize-guide-jpg-vs-png-vs-webp.html</loc><lastmod>2026-10-27</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
 </urlset>

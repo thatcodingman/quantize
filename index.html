@@ -31,11 +31,39 @@
 <meta property="og:image" content="https://quantizeapp.com/quantize-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Quantize">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quantize — Compress, resize, and convert images in bulk">
+<meta name="twitter:description" content="Drop in a batch of images, compress them all, and download one zip. Hit an exact target file size automatically, or convert between JPG, WebP, and PNG.">
+<meta name="twitter:image" content="https://quantizeapp.com/quantize-og.png">
+<meta name="robots" content="index, follow">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'><rect width='40' height='40' fill='%23FAFAF9'/><rect x='6' y='6' width='12' height='12' fill='%23E4572E'/><rect x='22' y='22' width='12' height='12' fill='%231B9C85'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="quantize-styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Quantize",
+  "url": "https://quantizeapp.com/",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any (runs in browser)",
+  "description": "A free, browser-based batch image compressor and converter. Drop in a folder of JPG, PNG, or WebP images, compress or convert them all at once, and download a single zip. Includes a target-file-size mode that automatically finds the compression level needed to hit an exact size.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "featureList": [
+    "Batch compress and convert JPG, PNG, and WebP images",
+    "Target file size mode — automatically hits a chosen KB/MB target",
+    "Runs entirely client-side, no uploads to a server",
+    "Download results as a single zip"
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -230,6 +258,24 @@
 
     <div class="file-list" id="fileList"></div>
     <button class="secondary" id="fileListToggleBtn" hidden></button>
+  </section>
+
+  <section class="seo-content">
+    <h2>A free batch image compressor that runs in your browser</h2>
+    <p>Quantize compresses and converts whole folders of photos at once — no software to install, no files uploaded to a server. Drag in your images, pick a format, and download everything as a single zip in seconds. It works for product photos, blog graphics, portfolio images, or any batch of files you need smaller before uploading them somewhere else.</p>
+
+    <h3>Hit an exact file size, not a guess</h3>
+    <p>Most compressors make you drag a quality slider and hope. Quantize's target file size mode does the opposite: type the size you need — say, 500 KB for a form upload limit — and it automatically tests compression levels until the output lands at or under that number.</p>
+
+    <h3>Convert between JPG, PNG, and WebP</h3>
+    <p>Switch formats while you compress. Convert JPG photos to WebP for smaller web pages, flatten PNGs down to JPG when transparency isn't needed, or keep everything lossless in PNG. Presets for web, social, and email cover the most common size targets automatically.</p>
+
+    <h3>Private by design</h3>
+    <p>Every image is processed locally in your browser using the Canvas API — nothing is ever sent to a server, so there's no upload wait and no privacy concern with sensitive or personal photos.</p>
+
+    <h3>Guides</h3>
+    <p><a href="quantize-guide-email-attachments.html">How to compress images to fit email attachment limits</a> — getting a batch of photos under the 25MB wall most providers enforce.</p>
+    <p><a href="quantize-guide-jpg-vs-png-vs-webp.html">JPG vs PNG vs WebP: which should you use?</a> — a plain-language breakdown of when each format actually makes sense.</p>
   </section>
 </main>
 
