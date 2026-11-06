@@ -407,10 +407,15 @@ select:disabled, input:disabled { opacity: .5; cursor: not-allowed; }
 .compare-col:first-child .compare-label, .results-preview-col:first-child .compare-label { color: var(--before); }
 .compare-col:last-child .compare-label, .results-preview-col:last-child .compare-label { color: var(--after); }
 
-footer { border-top: 1px solid var(--line); padding: 32px; margin-top: 40px; background: var(--paper); }
-footer .foot-inner { max-width: 1040px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-footer nav { display: flex; gap: 18px; font-family: var(--mono); font-size: .76rem; }
+/* Footer */
+footer { border-top: 1px solid var(--line); padding: 40px 32px 28px; margin-top: 40px; background: var(--paper); }
+footer .foot-inner { max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+footer .foot-main { display: flex; flex-direction: column; gap: 6px; }
+footer .foot-about { font-family: var(--body); font-size: .82rem; line-height: 1.55; color: var(--muted); margin: 0; max-width: 640px; }
+footer .network-links { margin: 0; }
+footer nav { display: flex; flex-wrap: wrap; gap: 12px 20px; font-family: var(--mono); font-size: .76rem; }
 footer p { color: var(--muted); font-size: .76rem; margin: 0; font-family: var(--mono); }
+footer p.foot-copy { padding-top: 4px; border-top: 1px solid var(--line); }
 
 /* SEO content block (homepage, below the tool) */
 .seo-content { max-width: 720px; margin: 0 auto; padding: 48px 0 72px; border-top: 1px solid var(--line); }
@@ -424,6 +429,7 @@ footer p { color: var(--muted); font-size: .76rem; margin: 0; font-family: var(-
 .legal h1 { font-family: var(--display); font-weight: 800; font-size: 2rem; margin-bottom: 6px; }
 .legal .updated { font-family: var(--mono); font-size: .76rem; color: var(--muted); margin-bottom: 36px; }
 .legal h2 { font-family: var(--display); font-weight: 700; font-size: 1.15rem; margin-top: 34px; }
+.legal h3 { font-family: var(--display); font-weight: 700; font-size: .98rem; margin-top: 22px; }
 .legal p, .legal li { color: var(--body-text); }
 .legal ul { padding-left: 20px; }
 
@@ -458,6 +464,7 @@ footer p { color: var(--muted); font-size: .76rem; margin: 0; font-family: var(-
   .compare-panel.visible { grid-template-columns: 1fr; }
   .results-preview { grid-template-columns: 1fr; max-width: 100%; }
   .preview-actions { margin-left: 0; width: 100%; justify-content: flex-end; }
+  footer { padding: 32px 18px 24px; }
 }
 
 /* Full-size preview lightbox */
